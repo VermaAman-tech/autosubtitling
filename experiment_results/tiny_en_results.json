@@ -1,0 +1,26 @@
+{
+  "avengers": {
+    "ref_cues": 22,
+    "hyp_cues": 12,
+    "full_wer": 0.1057,
+    "full_cer": 0.0701,
+    "mean_cue_wer": 2.0615,
+    "mean_cue_cer": 1.8853,
+    "timestamp_mae": 30.874,
+    "ref_text_sample": "You were made to be ruled. In the end, it will be every man for himself. What do we do? We get ready. There was an idea to bring together a group of remarkable people. So when we needed them, they cou",
+    "hyp_text_sample": "You are made to be ruled in the end. It will be every man for himself. What do we do? We get ready. There was an idea to bring together a remarkable people. So when we needed them, they could fight th",
+    "rtf": 0.0129
+  },
+  "spiderman": {
+    "ref_cues": 18,
+    "hyp_cues": 16,
+    "full_wer": 0.2129,
+    "full_cer": 0.1761,
+    "mean_cue_wer": 1.2269,
+    "mean_cue_cer": 1.0345,
+    "timestamp_mae": 24.385,
+    "ref_text_sample": "I can't believe our first hit of lights here! MJ, come on pretend like you're not the happiest you've ever been in your entire life! I can't. I knew it! Hi, my name is Peter Parker. You don't remember",
+    "hyp_text_sample": "Hi, my name is Peter Parker, you don't remember me, but we used to know each other. Something bad was gonna happen and the only way to stop it was to make everyone forget about me because I'm not just",
+    "rtf": 0.0132
+  }
+}

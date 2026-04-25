@@ -1,0 +1,1255 @@
+{
+  "video": "YTDown_YouTube_SPIDER-MAN-BRAND-NEW-DAY-Official-Traile_Media_8TZMtslA3UY_002_720p.mp4",
+  "duration_sec": 160.12,
+  "asr_model": "medium.en",
+  "rtf": 0.5149,
+  "segments": [
+    {
+      "start": 2.87,
+      "end": 62.96,
+      "text": "I can't believe our first day at MIT. MJ, come on, pretend like you're not the happiest you've ever been in your entire life. I can't. I knew it. Hi, my name is Peter Parker. You don't remember me, but we used to know each other. Something bad was going to happen, and the only way to stop it was to make everyone forget about me. Because I'm not just Peter Parker. I'm Spider-Man. Put your whimpering. Suit yourself. Go home.",
+      "avg_logprob": -0.1715
+    },
+    {
+      "start": 62.96,
+      "end": 114.19,
+      "text": "And sometimes Spider-Man has to do the hard thing, even if it breaks Peter Parker's heart. What is happening to me? Excuse me, Dr. Banner. I need your help. What did you say your name was? If DNA is mutating, it would be enormously dangerous. Spiders have three life cycles. When between cycles, it can leave the spider vulnerable to threats. We are faced with a danger that we can't control.",
+      "avg_logprob": -0.0999
+    },
+    {
+      "start": 115.19,
+      "end": 150.52,
+      "text": "One we can't even see. Stay out of my way. You're losing it, kid. And for those spiders who make it through, it amounts to a kind of keeper. Nice flowers. Oh, they're a housewarming gift. I'm MJ. I'm just a neighbor from across the hall. Friendly neighbor.",
+      "avg_logprob": -0.0591
+    },
+    {
+      "start": 150.52,
+      "end": 150.56,
+      "text": "The End.",
+      "avg_logprob": -0.919
+    }
+  ],
+  "cues": [
+    {
+      "index": 1,
+      "start": 2.87,
+      "end": 7.77,
+      "text": "I can't believe our first day at MIT. MJ, come on, pretend",
+      "emotion": "[TENSE]\ud83d\ude2c",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 2,
+      "start": 7.77,
+      "end": 10.09,
+      "text": "like you're not the happiest you've ever been in your entire life.",
+      "emotion": "[ANGRY]\ud83d\ude20",
+      "event": "[MUSIC/ambient]\ud83c\udfb5"
+    },
+    {
+      "index": 3,
+      "start": 11.86,
+      "end": 31.08,
+      "text": "I can't. I knew it. Hi, my name is Peter Parker. You",
+      "emotion": "[SAD]\ud83d\ude22",
+      "event": ""
+    },
+    {
+      "index": 4,
+      "start": 31.08,
+      "end": 34.86,
+      "text": "don't remember me, but we used to know each other. Something bad",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 5,
+      "start": 34.86,
+      "end": 37.78,
+      "text": "was going to happen, and the only way to stop it was",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 6,
+      "start": 37.78,
+      "end": 43.96,
+      "text": "to make everyone forget about me. Because I'm not just Peter Parker.",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 7,
+      "start": 45.26,
+      "end": 62.96,
+      "text": "I'm Spider -Man. Put your whimpering. Suit yourself. Go home.",
+      "emotion": "[TENSE]\ud83d\ude2c",
+      "event": ""
+    },
+    {
+      "index": 8,
+      "start": 62.96,
+      "end": 67.86,
+      "text": "And sometimes Spider -Man has to do the hard thing, even if",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 9,
+      "start": 67.86,
+      "end": 88.7,
+      "text": "it breaks Peter Parker's heart. What is happening to me? Excuse me,",
+      "emotion": "",
+      "event": ""
+    },
+    {
+      "index": 10,
+      "start": 88.72,
+      "end": 91.46,
+      "text": "Dr. Banner. I need your help. What did you say your name",
+      "emotion": "[ANGRY]\ud83d\ude20",
+      "event": ""
+    },
+    {
+      "index": 11,
+      "start": 91.46,
+      "end": 102.51,
+      "text": "was? If DNA is mutating, it would be enormously dangerous. Spiders have",
+      "emotion": "",
+      "event": "[LAUGHTER]\ud83d\ude02"
+    },
+    {
+      "index": 12,
+      "start": 102.51,
+      "end": 110.11,
+      "text": "three life cycles. When between cycles, it can leave the spider vulnerable",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 13,
+      "start": 110.11,
+      "end": 114.19,
+      "text": "to threats. We are faced with a danger that we can't control.",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 14,
+      "start": 115.19,
+      "end": 122.93,
+      "text": "One we can't even see. Stay out of my way. You're losing",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 15,
+      "start": 122.93,
+      "end": 129.04,
+      "text": "it, kid. And for those spiders who make it through, it amounts",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 16,
+      "start": 129.04,
+      "end": 146.4,
+      "text": "to a kind of keeper. Nice flowers. Oh, they're a housewarming gift.",
+      "emotion": "",
+      "event": "[LAUGHTER]\ud83d\ude02"
+    },
+    {
+      "index": 17,
+      "start": 146.76,
+      "end": 150.52,
+      "text": "I'm MJ. I'm just a neighbor from across the hall. Friendly neighbor.",
+      "emotion": "",
+      "event": "[MUSIC/heroic]\ud83c\udfb5"
+    },
+    {
+      "index": 18,
+      "start": 150.52,
+      "end": 151.02,
+      "text": "The End.",
+      "emotion": "[SAD]\ud83d\ude22",
+      "event": ""
+    }
+  ],
+  "sound_events": [
+    {
+      "start": 0.0,
+      "end": 2.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 1.0,
+      "end": 3.0,
+      "label": "LAUGHTER",
+      "confidence": 0.92,
+      "sub_label": null
+    },
+    {
+      "start": 2.0,
+      "end": 3.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 2.5,
+      "end": 4.5,
+      "label": "SPEECH",
+      "confidence": 0.846,
+      "sub_label": null
+    },
+    {
+      "start": 3.5,
+      "end": 5.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 4.5,
+      "end": 6.5,
+      "label": "SPEECH",
+      "confidence": 0.82,
+      "sub_label": null
+    },
+    {
+      "start": 5.5,
+      "end": 7.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 6.5,
+      "end": 8.0,
+      "label": "SPEECH",
+      "confidence": 0.817,
+      "sub_label": null
+    },
+    {
+      "start": 7.0,
+      "end": 8.5,
+      "label": "LAUGHTER",
+      "confidence": 0.92,
+      "sub_label": null
+    },
+    {
+      "start": 7.5,
+      "end": 11.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "ambient"
+    },
+    {
+      "start": 10.5,
+      "end": 12.0,
+      "label": "LAUGHTER",
+      "confidence": 0.92,
+      "sub_label": null
+    },
+    {
+      "start": 11.0,
+      "end": 13.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 12.0,
+      "end": 14.0,
+      "label": "SPEECH",
+      "confidence": 0.847,
+      "sub_label": null
+    },
+    {
+      "start": 13.0,
+      "end": 14.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 13.5,
+      "end": 20.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 19.0,
+      "end": 21.5,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 20.5,
+      "end": 23.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 22.0,
+      "end": 26.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 25.5,
+      "end": 27.0,
+      "label": "SPEECH",
+      "confidence": 0.792,
+      "sub_label": null
+    },
+    {
+      "start": 26.0,
+      "end": 28.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 27.0,
+      "end": 29.0,
+      "label": "SPEECH",
+      "confidence": 0.804,
+      "sub_label": null
+    },
+    {
+      "start": 28.0,
+      "end": 29.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 28.5,
+      "end": 31.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 30.0,
+      "end": 31.5,
+      "label": "SPEECH",
+      "confidence": 0.851,
+      "sub_label": null
+    },
+    {
+      "start": 30.5,
+      "end": 33.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 32.0,
+      "end": 33.5,
+      "label": "SPEECH",
+      "confidence": 0.862,
+      "sub_label": null
+    },
+    {
+      "start": 32.5,
+      "end": 34.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 33.0,
+      "end": 34.5,
+      "label": "SPEECH",
+      "confidence": 0.77,
+      "sub_label": null
+    },
+    {
+      "start": 33.5,
+      "end": 35.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 34.0,
+      "end": 35.5,
+      "label": "SPEECH",
+      "confidence": 0.814,
+      "sub_label": null
+    },
+    {
+      "start": 34.5,
+      "end": 37.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 36.0,
+      "end": 37.5,
+      "label": "SPEECH",
+      "confidence": 0.798,
+      "sub_label": null
+    },
+    {
+      "start": 36.5,
+      "end": 38.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 37.0,
+      "end": 40.5,
+      "label": "SPEECH",
+      "confidence": 0.862,
+      "sub_label": null
+    },
+    {
+      "start": 39.5,
+      "end": 42.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 41.5,
+      "end": 44.0,
+      "label": "SPEECH",
+      "confidence": 0.861,
+      "sub_label": null
+    },
+    {
+      "start": 43.0,
+      "end": 45.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 44.0,
+      "end": 46.0,
+      "label": "SPEECH",
+      "confidence": 0.864,
+      "sub_label": null
+    },
+    {
+      "start": 45.0,
+      "end": 46.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 45.5,
+      "end": 47.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 46.5,
+      "end": 49.5,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 48.5,
+      "end": 51.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 50.0,
+      "end": 51.5,
+      "label": "SPEECH",
+      "confidence": 0.821,
+      "sub_label": null
+    },
+    {
+      "start": 50.5,
+      "end": 54.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 53.0,
+      "end": 60.0,
+      "label": "SPEECH",
+      "confidence": 0.857,
+      "sub_label": null
+    },
+    {
+      "start": 59.0,
+      "end": 61.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 60.5,
+      "end": 63.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 62.5,
+      "end": 64.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 63.0,
+      "end": 65.0,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 64.0,
+      "end": 65.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 64.5,
+      "end": 67.5,
+      "label": "SPEECH",
+      "confidence": 0.856,
+      "sub_label": null
+    },
+    {
+      "start": 66.5,
+      "end": 68.0,
+      "label": "LAUGHTER",
+      "confidence": 0.876,
+      "sub_label": null
+    },
+    {
+      "start": 67.0,
+      "end": 68.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 67.5,
+      "end": 70.5,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 69.5,
+      "end": 71.5,
+      "label": "LAUGHTER",
+      "confidence": 0.92,
+      "sub_label": null
+    },
+    {
+      "start": 70.5,
+      "end": 72.0,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 71.0,
+      "end": 73.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 72.0,
+      "end": 74.0,
+      "label": "SPEECH",
+      "confidence": 0.862,
+      "sub_label": null
+    },
+    {
+      "start": 73.0,
+      "end": 76.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 75.5,
+      "end": 77.0,
+      "label": "SPEECH",
+      "confidence": 0.865,
+      "sub_label": null
+    },
+    {
+      "start": 76.0,
+      "end": 77.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 76.5,
+      "end": 78.5,
+      "label": "SPEECH",
+      "confidence": 0.829,
+      "sub_label": null
+    },
+    {
+      "start": 77.5,
+      "end": 80.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 79.0,
+      "end": 80.5,
+      "label": "SPEECH",
+      "confidence": 0.775,
+      "sub_label": null
+    },
+    {
+      "start": 79.5,
+      "end": 81.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 80.0,
+      "end": 82.0,
+      "label": "SPEECH",
+      "confidence": 0.786,
+      "sub_label": null
+    },
+    {
+      "start": 81.0,
+      "end": 84.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 83.5,
+      "end": 88.5,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 87.5,
+      "end": 89.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 88.0,
+      "end": 89.5,
+      "label": "SPEECH",
+      "confidence": 0.834,
+      "sub_label": null
+    },
+    {
+      "start": 88.5,
+      "end": 90.0,
+      "label": "LAUGHTER",
+      "confidence": 0.901,
+      "sub_label": null
+    },
+    {
+      "start": 89.0,
+      "end": 91.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 90.0,
+      "end": 92.0,
+      "label": "SPEECH",
+      "confidence": 0.823,
+      "sub_label": null
+    },
+    {
+      "start": 91.0,
+      "end": 92.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 91.5,
+      "end": 93.5,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 92.5,
+      "end": 94.5,
+      "label": "LAUGHTER",
+      "confidence": 0.92,
+      "sub_label": null
+    },
+    {
+      "start": 93.5,
+      "end": 95.0,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 94.0,
+      "end": 96.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 95.5,
+      "end": 97.0,
+      "label": "SPEECH",
+      "confidence": 0.801,
+      "sub_label": null
+    },
+    {
+      "start": 96.0,
+      "end": 97.5,
+      "label": "LAUGHTER",
+      "confidence": 0.92,
+      "sub_label": null
+    },
+    {
+      "start": 96.5,
+      "end": 98.0,
+      "label": "SPEECH",
+      "confidence": 0.841,
+      "sub_label": null
+    },
+    {
+      "start": 97.0,
+      "end": 100.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 99.0,
+      "end": 102.0,
+      "label": "SPEECH",
+      "confidence": 0.845,
+      "sub_label": null
+    },
+    {
+      "start": 101.0,
+      "end": 104.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 103.0,
+      "end": 104.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 103.5,
+      "end": 106.0,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 105.0,
+      "end": 107.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 106.0,
+      "end": 107.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 106.5,
+      "end": 109.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 108.0,
+      "end": 109.5,
+      "label": "LAUGHTER",
+      "confidence": 0.92,
+      "sub_label": null
+    },
+    {
+      "start": 108.5,
+      "end": 110.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 109.5,
+      "end": 113.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 112.0,
+      "end": 114.5,
+      "label": "SPEECH",
+      "confidence": 0.811,
+      "sub_label": null
+    },
+    {
+      "start": 113.5,
+      "end": 116.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 115.5,
+      "end": 117.0,
+      "label": "SPEECH",
+      "confidence": 0.808,
+      "sub_label": null
+    },
+    {
+      "start": 116.0,
+      "end": 117.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 116.5,
+      "end": 119.0,
+      "label": "SPEECH",
+      "confidence": 0.822,
+      "sub_label": null
+    },
+    {
+      "start": 118.0,
+      "end": 120.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 119.5,
+      "end": 122.5,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 121.5,
+      "end": 124.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 123.5,
+      "end": 125.0,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 124.0,
+      "end": 126.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 125.0,
+      "end": 127.0,
+      "label": "SPEECH",
+      "confidence": 0.82,
+      "sub_label": null
+    },
+    {
+      "start": 126.0,
+      "end": 128.5,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 127.5,
+      "end": 130.0,
+      "label": "SPEECH",
+      "confidence": 0.846,
+      "sub_label": null
+    },
+    {
+      "start": 129.0,
+      "end": 131.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 130.0,
+      "end": 138.0,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 137.0,
+      "end": 138.5,
+      "label": "LAUGHTER",
+      "confidence": 0.919,
+      "sub_label": null
+    },
+    {
+      "start": 137.5,
+      "end": 139.5,
+      "label": "SPEECH",
+      "confidence": 0.802,
+      "sub_label": null
+    },
+    {
+      "start": 138.5,
+      "end": 140.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 139.0,
+      "end": 144.0,
+      "label": "SPEECH",
+      "confidence": 0.88,
+      "sub_label": null
+    },
+    {
+      "start": 143.0,
+      "end": 145.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 144.0,
+      "end": 145.5,
+      "label": "SPEECH",
+      "confidence": 0.849,
+      "sub_label": null
+    },
+    {
+      "start": 144.5,
+      "end": 146.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 145.0,
+      "end": 146.5,
+      "label": "SPEECH",
+      "confidence": 0.768,
+      "sub_label": null
+    },
+    {
+      "start": 145.5,
+      "end": 149.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 148.0,
+      "end": 149.5,
+      "label": "SPEECH",
+      "confidence": 0.779,
+      "sub_label": null
+    },
+    {
+      "start": 148.5,
+      "end": 150.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 149.0,
+      "end": 150.5,
+      "label": "SPEECH",
+      "confidence": 0.718,
+      "sub_label": null
+    },
+    {
+      "start": 149.5,
+      "end": 152.0,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 151.0,
+      "end": 152.5,
+      "label": "IMPACT",
+      "confidence": 0.95,
+      "sub_label": null
+    },
+    {
+      "start": 151.5,
+      "end": 153.0,
+      "label": "MUSIC",
+      "confidence": 0.92,
+      "sub_label": "heroic"
+    },
+    {
+      "start": 152.0,
+      "end": 153.5,
+      "label": "AMBIENT",
+      "confidence": 0.4,
+      "sub_label": null
+    },
+    {
+      "start": 152.5,
+      "end": 160.125,
+      "label": "SILENCE",
+      "confidence": 0.95,
+      "sub_label": null
+    }
+  ],
+  "scene_boundaries": [
+    {
+      "time": 14.67,
+      "confidence": 0.729,
+      "description": "quiet \u2192 action"
+    },
+    {
+      "time": 16.83,
+      "confidence": 0.851,
+      "description": "audio character change"
+    },
+    {
+      "time": 26.91,
+      "confidence": 0.561,
+      "description": "audio character change"
+    },
+    {
+      "time": 45.15,
+      "confidence": 1.0,
+      "description": "audio character change"
+    },
+    {
+      "time": 50.91,
+      "confidence": 0.767,
+      "description": "audio character change"
+    },
+    {
+      "time": 53.07,
+      "confidence": 0.66,
+      "description": "audio character change"
+    },
+    {
+      "time": 54.03,
+      "confidence": 0.701,
+      "description": "audio character change"
+    },
+    {
+      "time": 62.19,
+      "confidence": 0.969,
+      "description": "quiet \u2192 action"
+    },
+    {
+      "time": 63.15,
+      "confidence": 0.972,
+      "description": "audio character change"
+    },
+    {
+      "time": 65.31,
+      "confidence": 0.769,
+      "description": "audio character change"
+    },
+    {
+      "time": 69.63,
+      "confidence": 0.636,
+      "description": "audio character change"
+    },
+    {
+      "time": 73.95,
+      "confidence": 0.61,
+      "description": "audio character change"
+    },
+    {
+      "time": 76.35,
+      "confidence": 0.757,
+      "description": "audio character change"
+    },
+    {
+      "time": 78.03,
+      "confidence": 0.656,
+      "description": "audio character change"
+    },
+    {
+      "time": 80.67,
+      "confidence": 0.945,
+      "description": "audio character change"
+    },
+    {
+      "time": 85.23,
+      "confidence": 0.614,
+      "description": "audio character change"
+    },
+    {
+      "time": 88.35,
+      "confidence": 0.642,
+      "description": "audio character change"
+    },
+    {
+      "time": 90.03,
+      "confidence": 0.689,
+      "description": "audio character change"
+    },
+    {
+      "time": 91.71,
+      "confidence": 0.893,
+      "description": "audio character change"
+    },
+    {
+      "time": 94.83,
+      "confidence": 0.57,
+      "description": "audio character change"
+    },
+    {
+      "time": 98.67,
+      "confidence": 0.655,
+      "description": "audio character change"
+    },
+    {
+      "time": 99.63,
+      "confidence": 0.815,
+      "description": "audio character change"
+    },
+    {
+      "time": 105.63,
+      "confidence": 0.77,
+      "description": "audio character change"
+    },
+    {
+      "time": 106.83,
+      "confidence": 0.87,
+      "description": "audio character change"
+    },
+    {
+      "time": 108.51,
+      "confidence": 0.765,
+      "description": "audio character change"
+    },
+    {
+      "time": 109.95,
+      "confidence": 0.77,
+      "description": "action \u2192 quiet"
+    },
+    {
+      "time": 111.39,
+      "confidence": 0.816,
+      "description": "audio character change"
+    },
+    {
+      "time": 112.35,
+      "confidence": 0.69,
+      "description": "audio character change"
+    },
+    {
+      "time": 114.99,
+      "confidence": 0.899,
+      "description": "audio character change"
+    },
+    {
+      "time": 116.67,
+      "confidence": 0.809,
+      "description": "audio character change"
+    },
+    {
+      "time": 117.87,
+      "confidence": 0.716,
+      "description": "audio character change"
+    },
+    {
+      "time": 122.43,
+      "confidence": 0.761,
+      "description": "audio character change"
+    },
+    {
+      "time": 123.63,
+      "confidence": 0.752,
+      "description": "audio character change"
+    },
+    {
+      "time": 127.23,
+      "confidence": 0.754,
+      "description": "audio character change"
+    },
+    {
+      "time": 139.47,
+      "confidence": 0.82,
+      "description": "audio character change"
+    },
+    {
+      "time": 142.83,
+      "confidence": 0.795,
+      "description": "audio character change"
+    },
+    {
+      "time": 144.27,
+      "confidence": 0.873,
+      "description": "quiet \u2192 action"
+    },
+    {
+      "time": 149.07,
+      "confidence": 0.668,
+      "description": "audio character change"
+    },
+    {
+      "time": 150.03,
+      "confidence": 0.613,
+      "description": "quiet \u2192 action"
+    },
+    {
+      "time": 151.47,
+      "confidence": 0.906,
+      "description": "audio character change"
+    },
+    {
+      "time": 152.67,
+      "confidence": 0.64,
+      "description": "action \u2192 quiet"
+    }
+  ]
+}

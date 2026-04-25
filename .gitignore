@@ -1,0 +1,31 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Large cached models (auto-downloaded on first run)
+*.bin
+*.pt
+*.onnx
+
+# Temporary audio files from experiments
+outputs/tmp_audio/
+experiment_results/*/tmp/
+outputs/synthetic_movie_reel.wav
+
+# Data downloads (large, auto-downloaded by dataset.py)
+data/downloads/
+data/raw/
+data/processed/

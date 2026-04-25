@@ -1,0 +1,4 @@
+vad_method,segments,speech_sec,speech_ratio,compute_ms
+energy,19,43.43,0.478,30.1
+mfcc,20,70.6,0.65,552.9
+spectral,13,78.48,0.7,90.3

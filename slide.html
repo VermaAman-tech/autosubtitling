@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Subtitling of Movies</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-dark: #0a0f1a;
+    --bg-card: rgba(20, 30, 50, 0.7);
+    --bg-card-hover: rgba(25, 40, 65, 0.8);
+    --cyan: #00e5ff;
+    --cyan-dim: #00b8d4;
+    --purple: #7c4dff;
+    --purple-dim: #651fff;
+    --green: #00e676;
+    --orange: #ff9100;
+    --red: #ff5252;
+    --text: #e0e6f0;
+    --text-dim: #8a95a8;
+    --border: rgba(0, 229, 255, 0.15);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slide {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    padding: 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide.active { display: flex; flex-direction: column; }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0, 229, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(124, 77, 255, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* Title slide */
+  .slide-title {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slide-title h1 {
+    font-size: 4.2rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff 0%, #c0d0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .slide-title .subtitle {
+    font-size: 1.3rem;
+    color: var(--cyan);
+    font-weight: 400;
+    margin-bottom: 50px;
+  }
+
+  .slide-title .team {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    line-height: 2;
+  }
+
+  .divider {
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+    margin: 30px auto;
+  }
+
+  /* Section headers */
+  h2 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  h2 .accent { color: var(--cyan); }
+
+  .slide-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    gap: 24px;
+    flex: 1;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 30px;
+    transition: all 0.3s;
+  }
+
+  .card:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(0, 229, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+
+  .card h3.purple { color: var(--purple); }
+  .card h3.green { color: var(--green); }
+  .card h3.orange { color: var(--orange); }
+
+  .card p, .card li {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+
+  .card ul { padding-left: 18px; }
+  .card li { margin-bottom: 4px; }
+
+  .card .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+
+  .tag.cyan { background: rgba(0, 229, 255, 0.1); color: var(--cyan); }
+  .tag.purple { background: rgba(124, 77, 255, 0.1); color: var(--purple); }
+  .tag.green { background: rgba(0, 230, 118, 0.1); color: var(--green); }
+  .tag.orange { background: rgba(255, 145, 0, 0.1); color: var(--orange); }
+
+  /* Architecture diagram */
+  .arch-pipeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    flex: 1;
+    margin-top: 10px;
+  }
+
+  .arch-stage {
+    flex: 1;
+    padding: 24px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .arch-stage:first-child { border-radius: 16px 0 0 16px; }
+  .arch-stage:last-child { border-radius: 0 16px 16px 0; }
+
+  .arch-stage .stage-num {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+
+  .arch-stage h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+
+  .arch-stage p, .arch-stage li {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  .arch-stage ul { padding-left: 16px; }
+  .arch-stage li { margin-bottom: 3px; }
+
+  .arrow-connector {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    color: var(--cyan);
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+
+  /* Two-column layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    flex: 1;
+  }
+
+  .two-col .col { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Processing detail boxes */
+  .process-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  .process-box h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .process-box h4.cyan { color: var(--cyan); }
+  .process-box h4.purple { color: var(--purple); }
+  .process-box h4.green { color: var(--green); }
+
+  .process-flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+  }
+
+  .flow-step {
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .flow-step.purple-step {
+    background: rgba(124, 77, 255, 0.08);
+    border-color: rgba(124, 77, 255, 0.2);
+  }
+
+  .flow-step.green-step {
+    background: rgba(0, 230, 118, 0.08);
+    border-color: rgba(0, 230, 118, 0.2);
+  }
+
+  .flow-arrow { color: var(--cyan); font-size: 0.9rem; }
+  .flow-arrow.purple { color: var(--purple); }
+  .flow-arrow.green { color: var(--green); }
+
+  /* Table */
+  .table-wrap {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 14px 20px;
+    color: var(--cyan);
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  tbody td {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  tbody tr:hover { background: rgba(0, 229, 255, 0.03); }
+
+  td .model-name { color: var(--text); font-weight: 600; }
+
+  /* Experiment cards */
+  .exp-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+
+  .exp-num.c1 { background: rgba(0, 229, 255, 0.15); color: var(--cyan); }
+  .exp-num.c2 { background: rgba(124, 77, 255, 0.15); color: var(--purple); }
+  .exp-num.c3 { background: rgba(0, 230, 118, 0.15); color: var(--green); }
+  .exp-num.c4 { background: rgba(255, 145, 0, 0.15); color: var(--orange); }
+  .exp-num.c5 { background: rgba(255, 82, 82, 0.15); color: var(--red); }
+  .exp-num.c6 { background: rgba(0, 229, 255, 0.15); color: var(--cyan); }
+
+  .exp-detail {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .exp-detail strong { color: var(--text); font-weight: 600; }
+
+  /* Section divider slide */
+  .slide-section {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slide-section h2 {
+    font-size: 3.4rem;
+    margin-bottom: 12px;
+  }
+
+  .slide-section p {
+    font-size: 1.15rem;
+    color: var(--cyan);
+  }
+
+  .section-line {
+    width: 60px;
+    height: 3px;
+    background: var(--cyan);
+    margin: 0 auto 30px;
+  }
+
+  /* Footer nav */
+  .slide-footer {
+    position: absolute;
+    bottom: 24px;
+    left: 80px;
+    right: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    z-index: 10;
+  }
+
+  .slide-counter { font-family: 'JetBrains Mono', monospace; }
+
+  .nav-hint {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* Key insight callout */
+  .callout {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.06), rgba(124, 77, 255, 0.06));
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    border-radius: 12px;
+    padding: 18px 24px;
+    margin-top: 16px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .callout strong { color: var(--cyan); }
+
+  /* Fusion diagram */
+  .fusion-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .fusion-streams {
+    display: flex;
+    gap: 40px;
+    align-items: flex-end;
+  }
+
+  .stream-box {
+    text-align: center;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .stream-audio {
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    color: var(--cyan);
+  }
+
+  .stream-visual {
+    background: rgba(124, 77, 255, 0.1);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    color: var(--purple);
+  }
+
+  .fusion-merge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .merge-arrows {
+    display: flex;
+    gap: 80px;
+    color: var(--text-dim);
+    font-size: 1.2rem;
+  }
+
+  .merge-box {
+    background: rgba(0, 230, 118, 0.1);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+    color: var(--green);
+    padding: 12px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .output-box {
+    background: rgba(255, 145, 0, 0.1);
+    border: 1px solid rgba(255, 145, 0, 0.3);
+    color: var(--orange);
+    padding: 10px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+
+  .small-text {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  .highlight { color: #fff; font-weight: 600; }
+
+  /* Responsive tweaks for smaller screens */
+  @media (max-width: 1200px) {
+    .slide { padding: 40px 50px; }
+    h2 { font-size: 2.2rem; }
+    .card-grid.cols-4 { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 1: Title ==================== -->
+<div class="slide slide-title active" id="s1">
+  <h1>Auto Subtitling of Movies</h1>
+  <p class="subtitle">Multimodal Speech Recognition for Cinematic Content</p>
+  <div class="divider"></div>
+  <p class="team">
+    Aman Verma (22B3929) &nbsp;|&nbsp; Anupam Rawat (22B3982)<br>
+    Cherish Jain (22B3937) &nbsp;|&nbsp; Saurabh Kumar (22B3905)
+  </p>
+</div>
+
+<!-- ==================== SLIDE 2: Problem ==================== -->
+<div class="slide" id="s2">
+  <h2>Why Movies <span class="accent">Break</span> Standard ASR</h2>
+  <p class="slide-subtitle">Cinematic audio is adversarial by design -- every element competes with dialogue</p>
+
+  <div class="card-grid cols-4">
+    <div class="card">
+      <span class="tag cyan">Acoustic</span>
+      <h3>Cocktail Party Problem</h3>
+      <p>Multiple actors speaking simultaneously. Standard single-channel ASR cannot isolate individual voices without additional cues.</p>
+    </div>
+    <div class="card">
+      <span class="tag purple">Signal</span>
+      <h3 class="purple">Extreme SNR Variance</h3>
+      <p>Dialogue SNR in movies can drop to -10 dB during action sequences. Background scores and foley effects often dominate the audio mix.</p>
+    </div>
+    <div class="card">
+      <span class="tag green">Temporal</span>
+      <h3 class="green">Frame-Level Alignment</h3>
+      <p>Subtitles must sync to video within ~40ms. Word-level timestamps from ASR need refinement against scene cuts and shot boundaries.</p>
+    </div>
+    <div class="card">
+      <span class="tag orange">Linguistic</span>
+      <h3 class="orange">Expressive & Varied Speech</h3>
+      <p>Whispers, screaming, accents, code-switching, and invented words (fantasy/sci-fi) fall far outside standard ASR training distributions.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top: 24px;">
+    <strong>Key Insight:</strong> Audio-only models hit a fundamental ceiling in these conditions. The visual modality (lip movements, facial expressions) provides a complementary, noise-invariant signal that can resolve ambiguities where audio alone fails.
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: Section Divider ==================== -->
+<div class="slide slide-section" id="s3">
+  <div class="section-line"></div>
+  <h2>System <span class="accent">Architecture</span></h2>
+  <p>End-to-end pipeline from raw movie to timed subtitles</p>
+</div>
+
+<!-- ==================== SLIDE 4: Architecture Pipeline ==================== -->
+<div class="slide" id="s4">
+  <h2>Pipeline <span class="accent">Overview</span></h2>
+  <p class="slide-subtitle">Six-stage processing chain from raw movie input to final SRT output</p>
+
+  <div class="arch-pipeline">
+    <div class="arch-stage">
+      <span class="stage-num">Stage 1</span>
+      <h4>Ingestion & Demuxing</h4>
+      <ul>
+        <li>FFmpeg demux: separate audio and video tracks</li>
+        <li>Audio: resample to 16kHz mono PCM</li>
+        <li>Video: extract frames at native FPS</li>
+        <li>Scene boundary detection (PySceneDetect)</li>
+      </ul>
+    </div>
+    <div class="arrow-connector">&rarr;</div>
+    <div class="arch-stage">
+      <span class="stage-num">Stage 2</span>
+      <h4>Audio Pre-processing</h4>
+      <ul>
+        <li>Source separation (Demucs/HTDemucs): vocals vs. music vs. SFX</li>
+        <li>VAD: Voice Activity Detection (Silero VAD)</li>
+        <li>Chunking into utterance-level segments</li>
+      </ul>
+    </div>
+    <div class="arrow-connector">&rarr;</div>
+    <div class="arch-stage">
+      <span class="stage-num">Stage 3</span>
+      <h4>Visual Pre-processing</h4>
+      <ul>
+        <li>Face detection & tracking (RetinaFace / MTCNN)</li>
+        <li>Mouth ROI cropping (96x96 grayscale)</li>
+        <li>Lip landmark extraction (MediaPipe/dlib)</li>
+        <li>Active Speaker Detection (TalkNet)</li>
+      </ul>
+    </div>
+    <div class="arrow-connector">&rarr;</div>
+    <div class="arch-stage">
+      <span class="stage-num">Stage 4</span>
+      <h4>Feature Extraction</h4>
+      <ul>
+        <li>Audio: log Mel-spectrogram (80-dim) or raw waveform encoder</li>
+        <li>Visual: ResNet-18 + 3D-Conv temporal encoder on lip crops</li>
+        <li>Positional encoding + modality-specific projections</li>
+      </ul>
+    </div>
+    <div class="arrow-connector">&rarr;</div>
+    <div class="arch-stage">
+      <span class="stage-num">Stage 5</span>
+      <h4>AV Fusion & Decoding</h4>
+      <ul>
+        <li>Cross-modal attention (audio queries, visual keys)</li>
+        <li>Joint Conformer/Transformer encoder</li>
+        <li>CTC + Attention hybrid decoder</li>
+        <li>Beam search with language model rescoring</li>
+      </ul>
+    </div>
+    <div class="arrow-connector">&rarr;</div>
+    <div class="arch-stage">
+      <span class="stage-num">Stage 6</span>
+      <h4>Post-processing</h4>
+      <ul>
+        <li>Forced alignment (wav2vec2-based) for word timestamps</li>
+        <li>Speaker diarization labels</li>
+        <li>Subtitle segmentation (line length, reading speed)</li>
+        <li>SRT/VTT generation</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: Processing Deep Dive ==================== -->
+<div class="slide" id="s5">
+  <h2>Processing <span class="accent">Deep Dive</span></h2>
+  <p class="slide-subtitle">How each modality is processed before fusion</p>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="process-box">
+        <h4 class="cyan">Audio Stream Processing</h4>
+        <div class="process-flow">
+          <span class="flow-step">Raw Waveform</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">Source Separation (Demucs)</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">Isolated Vocals</span>
+        </div>
+        <div class="process-flow">
+          <span class="flow-step">Vocals</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">80-dim Log Mel Spectrogram</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">Audio Encoder (Conformer)</span>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:12px;">
+          Conformer blocks interleave self-attention with depthwise convolutions, capturing both global context and local acoustic patterns. Output: sequence of audio embeddings <strong style="color:var(--cyan)">H<sub>a</sub> &isin; R<sup>T&times;d</sup></strong>.
+        </p>
+      </div>
+
+      <div class="process-box">
+        <h4 class="purple">Visual Stream Processing</h4>
+        <div class="process-flow">
+          <span class="flow-step purple-step">Video Frames</span>
+          <span class="flow-arrow purple">&rarr;</span>
+          <span class="flow-step purple-step">Face Detect (RetinaFace)</span>
+          <span class="flow-arrow purple">&rarr;</span>
+          <span class="flow-step purple-step">Mouth ROI Crop</span>
+        </div>
+        <div class="process-flow">
+          <span class="flow-step purple-step">96x96 Lip Crops</span>
+          <span class="flow-arrow purple">&rarr;</span>
+          <span class="flow-step purple-step">ResNet-18 + 3D Conv</span>
+          <span class="flow-arrow purple">&rarr;</span>
+          <span class="flow-step purple-step">Visual Encoder (Transformer)</span>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:12px;">
+          3D convolutions capture temporal lip dynamics across frames. The visual encoder outputs embeddings <strong style="color:var(--purple)">H<sub>v</sub> &isin; R<sup>T'&times;d</sup></strong> aligned to the audio timeline via interpolation.
+        </p>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="process-box">
+        <h4 class="green">Cross-Modal Fusion</h4>
+        <div class="process-flow">
+          <span class="flow-step">H<sub>a</sub> (Audio)</span>
+          <span class="flow-step purple-step">H<sub>v</sub> (Visual)</span>
+          <span class="flow-arrow green">&rarr;</span>
+          <span class="flow-step green-step">Cross-Attention</span>
+          <span class="flow-arrow green">&rarr;</span>
+          <span class="flow-step green-step">Joint Repr.</span>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:12px;">
+          <strong style="color:var(--green)">Cross-modal attention</strong> lets the audio stream "attend" to relevant visual frames. When audio is noisy, the attention weights shift toward the visual modality. When the speaker is off-screen, audio takes precedence.
+        </p>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">
+          Q = W<sub>q</sub>H<sub>a</sub>, &nbsp; K = W<sub>k</sub>H<sub>v</sub>, &nbsp; V = W<sub>v</sub>H<sub>v</sub><br>
+          Attention(Q, K, V) = softmax(QK<sup>T</sup> / &radic;d) V
+        </p>
+      </div>
+
+      <div class="process-box">
+        <h4 style="color: var(--orange);">Decoding & Alignment</h4>
+        <div class="process-flow">
+          <span class="flow-step green-step">Fused Features</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">CTC + Attn Decoder</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">Token Sequence</span>
+        </div>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:12px;">
+          <strong>Hybrid CTC/Attention</strong> decoding: CTC provides monotonic alignment constraint, attention decoder captures linguistic dependencies. Beam search with LM shallow fusion for final output.
+        </p>
+        <p style="font-size:0.8rem; color:var(--text-dim); margin-top:8px;">
+          <strong style="color:var(--orange);">Forced alignment</strong> (wav2vec2-align) then maps decoded tokens back to precise timestamps for subtitle cue points.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: Key Models ==================== -->
+<div class="slide" id="s6">
+  <h2>Key <span class="accent">Models & Architectures</span></h2>
+  <p class="slide-subtitle">Evolution from audio-only to multimodal systems (2020-2026)</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Model</th>
+          <th>Modality</th>
+          <th>Core Technique</th>
+          <th>Movie Noise Handling</th>
+          <th>Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2020</td>
+          <td><span class="model-name">Wav2Vec 2.0</span></td>
+          <td>Audio</td>
+          <td>Self-supervised pre-training (masked prediction on raw waveform)</td>
+          <td>Moderate -- requires domain fine-tuning</td>
+          <td>Raw text</td>
+        </tr>
+        <tr>
+          <td>2021</td>
+          <td><span class="model-name">HuBERT</span></td>
+          <td>Audio</td>
+          <td>Offline clustering + masked prediction (Hidden-Unit BERT)</td>
+          <td>Better acoustic modeling, still audio-only</td>
+          <td>Raw text</td>
+        </tr>
+        <tr>
+          <td>2022</td>
+          <td><span class="model-name">Whisper</span></td>
+          <td>Audio</td>
+          <td>680K hrs weakly supervised; encoder-decoder Transformer</td>
+          <td>Highly robust (scale + diversity)</td>
+          <td>Text + timestamps</td>
+        </tr>
+        <tr>
+          <td>2023</td>
+          <td><span class="model-name">AV-HuBERT</span></td>
+          <td>Audio + Visual</td>
+          <td>Joint audio-visual masked prediction; cross-modal SSL</td>
+          <td>Exceptional -- visual signal compensates in noise</td>
+          <td>Text (noise-robust)</td>
+        </tr>
+        <tr>
+          <td>2024</td>
+          <td><span class="model-name">Auto-AVSR</span></td>
+          <td>Audio + Visual</td>
+          <td>End-to-end AV-ASR with automatic lip crop pipeline</td>
+          <td>SOTA on LRS2/LRS3; graceful audio degradation</td>
+          <td>Text + word timestamps</td>
+        </tr>
+        <tr>
+          <td>2024+</td>
+          <td><span class="model-name">Qwen-Audio / SALMONN</span></td>
+          <td>Audio + LLM</td>
+          <td>Audio as a native LLM modality; instruction following</td>
+          <td>Contextual understanding; non-speech events</td>
+          <td>Text + emotion + SFX labels</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: AV-ASR Architecture ==================== -->
+<div class="slide" id="s7">
+  <h2>Audio-Visual ASR <span class="accent">Architecture</span></h2>
+  <p class="slide-subtitle">How AV-HuBERT and Auto-AVSR fuse lip reading with speech recognition</p>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="card" style="flex:1;">
+        <span class="tag cyan">AV-HuBERT (2023)</span>
+        <h3>Self-Supervised Audio-Visual Pre-training</h3>
+        <ul>
+          <li>Masks segments of <strong>both</strong> audio and video input simultaneously</li>
+          <li>Predicts cluster assignments from a joint AV representation</li>
+          <li>Audio encoder: modified Transformer on log mel-filterbanks</li>
+          <li>Visual encoder: ResNet-18 on mouth ROI crops + temporal positional encoding</li>
+          <li>Early fusion via concatenation of modality embeddings before the shared Transformer</li>
+          <li>Fine-tuned with CTC loss on labeled speech data (LRS3, VoxCeleb2)</li>
+        </ul>
+        <div class="callout" style="margin-top:14px;">
+          <strong>Why this matters for movies:</strong> Because the model learns joint audio-visual representations during pre-training, it naturally shifts reliance to the visual stream when audio degrades (music, explosions).
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card" style="flex:1;">
+        <span class="tag purple">Auto-AVSR (2024)</span>
+        <h3>End-to-End Production Pipeline</h3>
+        <ul>
+          <li>Automatic preprocessing: face detection, tracking, and mouth ROI extraction built into the pipeline</li>
+          <li>Visual frontend: ResNet-18 + 3D convolution + Temporal Convolutional Network</li>
+          <li>Audio frontend: log filterbank features + Conformer encoder</li>
+          <li>Late fusion via cross-attention layers in the decoder</li>
+          <li>Hybrid CTC/Attention decoder with LM shallow fusion</li>
+          <li>Achieves SOTA WER on LRS2 (1.0%) and LRS3 (0.9%) benchmarks</li>
+        </ul>
+        <div class="callout" style="margin-top:14px;">
+          <strong>Key advantage:</strong> Unlike AV-HuBERT which needs pre-cropped lip videos, Auto-AVSR handles raw video input end-to-end, making it practical for movie subtitling.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: Section Divider ==================== -->
+<div class="slide slide-section" id="s8">
+  <div class="section-line"></div>
+  <h2>Proposed <span class="accent">Experiments</span></h2>
+  <p>Systematic evaluation of audio-only vs. audio-visual approaches</p>
+</div>
+
+<!-- ==================== SLIDE 9: Experiments ==================== -->
+<div class="slide" id="s9">
+  <h2>Experiment <span class="accent">Design</span></h2>
+  <p class="slide-subtitle">Six experiments to characterize when and why multimodal fusion improves subtitle quality</p>
+
+  <div class="card-grid cols-3">
+    <div class="card">
+      <div class="exp-num c1">1</div>
+      <h3>Noise Robustness Curve</h3>
+      <p>Compare Whisper vs. AV-HuBERT vs. Auto-AVSR at SNR levels from clean (40dB) down to -10dB using additive movie soundtracks.</p>
+      <div class="exp-detail">
+        <strong>Metric:</strong> WER at each SNR level<br>
+        <strong>Dataset:</strong> LRS3 test set + movie-score noise injection<br>
+        <strong>Hypothesis:</strong> AV models degrade gracefully below 0dB where audio-only collapses
+      </div>
+    </div>
+    <div class="card">
+      <div class="exp-num c2">2</div>
+      <h3 class="purple">Visual Modality Ablation</h3>
+      <p>Systematically degrade the visual stream: lower resolution lip crops, occluded faces, off-screen speakers. Measure WER impact.</p>
+      <div class="exp-detail">
+        <strong>Metric:</strong> WER delta vs. full visual input<br>
+        <strong>Conditions:</strong> 96px, 48px, 24px ROI; 25%, 50%, 75% occlusion<br>
+        <strong>Goal:</strong> Understand the model's fallback behavior when visual cues are degraded
+      </div>
+    </div>
+    <div class="card">
+      <div class="exp-num c3">3</div>
+      <h3 class="green">Source Separation Impact</h3>
+      <p>Run the ASR pipeline with and without a Demucs source-separation preprocessing stage. Compare on dialogue-heavy vs. action scenes.</p>
+      <div class="exp-detail">
+        <strong>Metric:</strong> WER, SI-SDR of separated vocals<br>
+        <strong>Dataset:</strong> Curated movie clips (10 dialogue, 10 action)<br>
+        <strong>Goal:</strong> Quantify whether source separation helps AV models or is redundant
+      </div>
+    </div>
+    <div class="card">
+      <div class="exp-num c4">4</div>
+      <h3 class="orange">Overlapping Speaker Resolution</h3>
+      <p>Two speakers talking simultaneously. Compare audio-only diarization (pyannote) vs. AV diarization using active speaker detection (TalkNet).</p>
+      <div class="exp-detail">
+        <strong>Metric:</strong> DER (Diarization Error Rate), WER per speaker<br>
+        <strong>Dataset:</strong> AMI meeting corpus + synthetic movie overlaps<br>
+        <strong>Goal:</strong> Measure visual contribution to the cocktail party problem
+      </div>
+    </div>
+    <div class="card">
+      <div class="exp-num c5">5</div>
+      <h3 style="color:var(--red);">Domain Adaptation</h3>
+      <p>Fine-tune AV-HuBERT (pre-trained on LRS3) on a small labeled movie dataset. Measure WER improvement and genre transfer (drama vs. action).</p>
+      <div class="exp-detail">
+        <strong>Metric:</strong> WER before/after fine-tuning<br>
+        <strong>Data:</strong> ~50 hrs movie clips with ground-truth subtitles<br>
+        <strong>Goal:</strong> Assess data efficiency of AV pre-training for domain shift
+      </div>
+    </div>
+    <div class="card">
+      <div class="exp-num c6">6</div>
+      <h3>Non-Speech Sound Captioning</h3>
+      <p>Use Qwen-Audio to detect and label non-speech events ([gunshot], [door creaks], [ominous music]) alongside dialogue transcription.</p>
+      <div class="exp-detail">
+        <strong>Metric:</strong> F1 for sound event detection; subtitle readability score<br>
+        <strong>Baseline:</strong> Manual SDH (Subtitles for Deaf/HoH) annotations<br>
+        <strong>Goal:</strong> Move beyond transcription toward true closed captioning
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 10: Datasets & Metrics ==================== -->
+<div class="slide" id="s10">
+  <h2>Datasets & <span class="accent">Evaluation</span></h2>
+  <p class="slide-subtitle">Standard benchmarks and metrics for audio-visual speech recognition</p>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="card" style="flex:1;">
+        <h3>Datasets</h3>
+        <table style="font-size:0.82rem;">
+          <thead>
+            <tr><th>Dataset</th><th>Hours</th><th>Modality</th><th>Use</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LRS2</td><td>224h</td><td>Audio + Video</td><td>Primary AV-ASR benchmark</td></tr>
+            <tr><td>LRS3</td><td>433h</td><td>Audio + Video</td><td>Largest AV speech dataset (TED talks)</td></tr>
+            <tr><td>VoxCeleb2</td><td>2,400h</td><td>Audio + Video</td><td>Pre-training, speaker recognition</td></tr>
+            <tr><td>AVSpeech</td><td>4,700h</td><td>Audio + Video</td><td>Large-scale AV pre-training</td></tr>
+            <tr><td>LibriSpeech</td><td>960h</td><td>Audio only</td><td>Audio-only ASR baseline</td></tr>
+            <tr><td>Movie clips*</td><td>~50h</td><td>Audio + Video</td><td>Domain adaptation fine-tuning</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:0.75rem; color:var(--text-dim); margin-top:8px;">*Curated from open-license films with ground-truth subtitles</p>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <h3 class="purple">Primary Metrics</h3>
+        <ul>
+          <li><strong style="color:var(--text)">WER</strong> -- Word Error Rate (substitutions + insertions + deletions / total words)</li>
+          <li><strong style="color:var(--text)">CER</strong> -- Character Error Rate (finer granularity for accented speech)</li>
+          <li><strong style="color:var(--text)">DER</strong> -- Diarization Error Rate (speaker attribution accuracy)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="green">Subtitle-Specific Metrics</h3>
+        <ul>
+          <li><strong style="color:var(--text)">Timestamp Accuracy</strong> -- Mean absolute error of subtitle cue points vs. ground truth (ms)</li>
+          <li><strong style="color:var(--text)">Reading Speed</strong> -- Characters per second; must stay within 15-25 CPS for readability</li>
+          <li><strong style="color:var(--text)">BLEU / METEOR</strong> -- Translation quality (for multilingual subtitle generation)</li>
+          <li><strong style="color:var(--text)">SED F1</strong> -- Sound Event Detection F1 (for non-speech captioning)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 11: Summary & Next Steps ==================== -->
+<div class="slide" id="s11">
+  <h2>Summary & <span class="accent">Next Steps</span></h2>
+  <p class="slide-subtitle">Where we are and what comes next</p>
+
+  <div class="two-col" style="gap:30px;">
+    <div class="col" style="gap:20px;">
+      <div class="card">
+        <span class="tag cyan">Completed</span>
+        <h3>Literature Survey & Architecture Design</h3>
+        <ul>
+          <li>Surveyed ASR evolution: classical &rarr; SSL &rarr; weakly-supervised &rarr; AV-ASR &rarr; LALMs</li>
+          <li>Identified AV-HuBERT and Auto-AVSR as primary architectures to investigate</li>
+          <li>Designed end-to-end pipeline: ingestion &rarr; separation &rarr; visual processing &rarr; fusion &rarr; decoding &rarr; SRT</li>
+          <li>Defined 6 experiments with clear hypotheses and metrics</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag purple">In Progress</span>
+        <h3 class="purple">Baseline Implementation</h3>
+        <ul>
+          <li>Setting up Whisper (large-v3) audio-only baseline on LRS3</li>
+          <li>Configuring AV-HuBERT pre-trained model with fine-tuning pipeline</li>
+          <li>Building Demucs source separation preprocessing module</li>
+          <li>Curating movie clip evaluation set with genre diversity</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col" style="gap:20px;">
+      <div class="card">
+        <span class="tag green">Upcoming</span>
+        <h3 class="green">Experiment Execution</h3>
+        <ul>
+          <li>Run noise robustness curve (Exp 1) -- expected first results in 2 weeks</li>
+          <li>Visual ablation study (Exp 2) immediately after</li>
+          <li>Source separation comparison (Exp 3) in parallel</li>
+          <li>Domain adaptation fine-tuning (Exp 5) -- depends on movie dataset curation</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag orange">Stretch Goals</span>
+        <h3 class="orange">Advanced Capabilities</h3>
+        <ul>
+          <li>Integrate Qwen-Audio for non-speech sound captioning (Exp 6)</li>
+          <li>Multi-agent pipeline prototype combining specialized models</li>
+          <li>RAG-based post-correction using movie script retrieval</li>
+          <li>Real-time streaming AV-ASR feasibility study</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 12: Questions ==================== -->
+<div class="slide slide-section" id="s12">
+  <div class="section-line"></div>
+  <h2>Questions?</h2>
+  <p>Thank you for your time and attention.</p>
+</div>
+
+<!-- Footer on all slides -->
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  // Add footer to each slide
+  slides.forEach((slide, i) => {
+    const footer = document.createElement('div');
+    footer.className = 'slide-footer';
+    footer.innerHTML = `
+      <span class="slide-counter">${i + 1} / ${total}</span>
+      <span class="nav-hint">&larr; &rarr; arrow keys to navigate</span>
+    `;
+    slide.appendChild(footer);
+  });
+
+  let current = 0;
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  // Touch support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) > 50) {
+      diff < 0 ? goTo(current + 1) : goTo(current - 1);
+    }
+  });
+</script>
+</body>
+</html>

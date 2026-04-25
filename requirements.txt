@@ -1,0 +1,33 @@
+# ── Core ASR ────────────────────────────────────────────────────────────────
+faster-whisper          # CTranslate2 Whisper with built-in Silero VAD
+# (faster-whisper bundles ctranslate2 + silero-vad internally)
+
+# ── Emotion detection ────────────────────────────────────────────────────────
+opensmile               # eGeMAPSv02 acoustic feature extraction (88-dim)
+scikit-learn            # optional: for future classifier training
+
+# ── Sound events & scene detection ──────────────────────────────────────────
+librosa                 # spectrogram, onset, HPSS, spectral features
+scipy                   # argrelextrema for novelty peak-picking
+
+# ── Audio I/O ────────────────────────────────────────────────────────────────
+soundfile               # read/write WAV
+imageio-ffmpeg          # bundled ffmpeg for audio extraction
+
+# ── Visualisation ────────────────────────────────────────────────────────────
+matplotlib
+
+# ── SRT handling ─────────────────────────────────────────────────────────────
+pysrt
+
+# ── Evaluation ───────────────────────────────────────────────────────────────
+jiwer                   # WER / CER computation vs reference SRT
+
+# ── General ─────────────────────────────────────────────────────────────────
+numpy
+pandas
+requests
+tqdm
+
+# ── Optional: microphone support for live pipeline ───────────────────────────
+# sounddevice            # pip install sounddevice  (uncomment if using mic)

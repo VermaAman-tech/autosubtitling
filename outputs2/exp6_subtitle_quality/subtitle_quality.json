@@ -1,0 +1,38 @@
+{
+  "clean": {
+    "scenario": "clean",
+    "noise_type": "soundtrack",
+    "snr_db": 30,
+    "ref_cues": 8,
+    "pred_cues": 23,
+    "timestamp_mae_sec": 29.201,
+    "ref_cps_violations": 0,
+    "pred_cps_violations": 7,
+    "mean_wer": 0.9661,
+    "mean_pred_cps": 22.34
+  },
+  "moderate_noise": {
+    "scenario": "moderate_noise",
+    "noise_type": "pink",
+    "snr_db": 10,
+    "ref_cues": 8,
+    "pred_cues": 21,
+    "timestamp_mae_sec": 24.241,
+    "ref_cps_violations": 0,
+    "pred_cps_violations": 7,
+    "mean_wer": 0.9232,
+    "mean_pred_cps": 21.12
+  },
+  "heavy_noise": {
+    "scenario": "heavy_noise",
+    "noise_type": "soundtrack",
+    "snr_db": 0,
+    "ref_cues": 8,
+    "pred_cues": 16,
+    "timestamp_mae_sec": 22.275,
+    "ref_cps_violations": 0,
+    "pred_cps_violations": 3,
+    "mean_wer": 1.0,
+    "mean_pred_cps": 16.56
+  }
+}

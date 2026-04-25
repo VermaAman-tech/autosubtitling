@@ -1,0 +1,73 @@
+{
+  "model_comparison": {
+    "avengers": {
+      "medium.en": {
+        "ref_cues": 22,
+        "hyp_cues": 13,
+        "full_wer": 0.0488,
+        "full_cer": 0.031,
+        "mean_cue_wer": 2.0728,
+        "mean_cue_cer": 1.8354,
+        "timestamp_mae": 25.211,
+        "ref_text_sample": "You were made to be ruled. In the end, it will be every man for himself. What do we do? We get ready. There was an idea to bring together a group of remarkable people. So when we needed them, they cou",
+        "hyp_text_sample": "you were made to be ruled in the end it will be every man for himself what do we do we get ready there was an idea to bring together a group of remarkable people so when we needed them they could figh",
+        "rtf": 0.1073
+      }
+    },
+    "spiderman": {
+      "medium.en": {
+        "ref_cues": 18,
+        "hyp_cues": 18,
+        "full_wer": 0.1436,
+        "full_cer": 0.0841,
+        "mean_cue_wer": 0.8313,
+        "mean_cue_cer": 0.761,
+        "timestamp_mae": 4.551,
+        "ref_text_sample": "I can't believe our first hit of lights here! MJ, come on pretend like you're not the happiest you've ever been in your entire life! I can't. I knew it! Hi, my name is Peter Parker. You don't remember",
+        "hyp_text_sample": "I can't believe our first day at MIT. MJ, come on, pretend like you're not the happiest you've ever been in your entire life. I can't. I knew it. Hi, my name is Peter Parker. You don't remember me, bu",
+        "rtf": 0.4119
+      }
+    }
+  },
+  "annotations": {
+    "avengers": {
+      "total_cues": 13,
+      "emotion_distribution": {
+        "sad": 8,
+        "neutral": 5
+      },
+      "total_events": 91,
+      "event_distribution": {
+        "SILENCE": 2,
+        "AMBIENT": 21,
+        "MUSIC": 27,
+        "SPEECH": 32,
+        "LAUGHTER": 9
+      },
+      "scene_boundaries": 33,
+      "duration_sec": 124.97,
+      "rtf": 0.1073
+    },
+    "spiderman": {
+      "total_cues": 18,
+      "emotion_distribution": {
+        "tense": 2,
+        "angry": 2,
+        "sad": 2,
+        "neutral": 12
+      },
+      "total_events": 124,
+      "event_distribution": {
+        "MUSIC": 39,
+        "LAUGHTER": 10,
+        "AMBIENT": 23,
+        "SPEECH": 50,
+        "IMPACT": 1,
+        "SILENCE": 1
+      },
+      "scene_boundaries": 41,
+      "duration_sec": 160.12,
+      "rtf": 0.4119
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "reference_cues": 6,
+  "predicted_cues": 10,
+  "timestamp_mae_sec": 5.000000000000001,
+  "reference_cps_violations": 0,
+  "predicted_cps_violations": 3
+}

@@ -1,0 +1,40 @@
+{
+  "video": "Marvel's The Avengers- Trailer (OFFICIAL) - Marvel Entertainment (1080p, h264).mp4",
+  "audio_duration_sec": 124.97,
+  "vad_method": "spectral",
+  "vad_segments_detected": 13,
+  "vad_speech_ratio": 0.7,
+  "vad_compute_ms": 90.5,
+  "subtitle_cues": 9,
+  "cps_violations": 2,
+  "enhanced_segments": 1,
+  "raw_segments": 8,
+  "asr_total_audio_sec": 78.48,
+  "asr_total_inference_ms": 3779.2,
+  "asr_mean_rtf": 0.1288,
+  "asr_overall_rtf": 0.0482,
+  "audio_extract_ms": 71.0,
+  "vad_comparison": [
+    {
+      "vad_method": "energy",
+      "segments": 19,
+      "speech_sec": 43.43,
+      "speech_ratio": 0.478,
+      "compute_ms": 30.1
+    },
+    {
+      "vad_method": "mfcc",
+      "segments": 20,
+      "speech_sec": 70.6,
+      "speech_ratio": 0.65,
+      "compute_ms": 552.9
+    },
+    {
+      "vad_method": "spectral",
+      "segments": 13,
+      "speech_sec": 78.48,
+      "speech_ratio": 0.7,
+      "compute_ms": 90.3
+    }
+  ]
+}
