@@ -32,4 +32,5 @@ data/processed/
 movies/
 youtube_trailers/
 evaluate_results/
-
+tectonic/
+tectonic.tar.gz/
