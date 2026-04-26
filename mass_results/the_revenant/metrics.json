@@ -1,0 +1,22 @@
+{
+  "slug": "the_revenant",
+  "duration_sec": 275.06,
+  "vad_segments": 77,
+  "speech_ratio": 0.7,
+  "pred_cues": 62,
+  "ref_cues": 190,
+  "wer": 0.8272,
+  "cer": 0.7532,
+  "ts_mae_sec": 53.098,
+  "cps_violations": 26,
+  "asr_rtf_mean": 0.5968,
+  "asr_rtf_overall": 0.1522,
+  "asr_total_inf_ms": 25016.2,
+  "enhanced_segs": 28,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.116,
+  "scene_speech_fraction": 0.584,
+  "scene_n_segments": 140,
+  "scene_n_boundaries": 144,
+  "scene_compute_ms": 6719.2
+}

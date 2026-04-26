@@ -1,0 +1,498 @@
+[
+  {
+    "start": 3.22,
+    "end": 3.57,
+    "text": "Bye.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Bye."
+  },
+  {
+    "start": 13.49,
+    "end": 14.15,
+    "text": "I didn't come out of.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 I didn't come out of."
+  },
+  {
+    "start": 16.07,
+    "end": 16.95,
+    "text": "Hey everybody!",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Hey everybody!"
+  },
+  {
+    "start": 17.79,
+    "end": 18.07,
+    "text": "the light.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 the light."
+  },
+  {
+    "start": 25.1,
+    "end": 25.38,
+    "text": "Whatever.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Whatever."
+  },
+  {
+    "start": 25.82,
+    "end": 26.26,
+    "text": "yourself.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 yourself."
+  },
+  {
+    "start": 30.38,
+    "end": 30.71,
+    "text": "Thank you.",
+    "mood_tag": "[HAPPY]\ud83d\ude0a",
+    "scene_type": "music_only",
+    "annotated_text": "[HAPPY]\ud83d\ude0a Thank you."
+  },
+  {
+    "start": 38.01,
+    "end": 38.26,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 39.51,
+    "end": 40.34,
+    "text": "Never ever.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Never ever."
+  },
+  {
+    "start": 42.33,
+    "end": 42.59,
+    "text": "problem.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 problem."
+  },
+  {
+    "start": 43.65,
+    "end": 44.43,
+    "text": "was in that view.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 was in that view."
+  },
+  {
+    "start": 49.14,
+    "end": 50.39,
+    "text": "All is not",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 All is not"
+  },
+  {
+    "start": 53.6,
+    "end": 54.5,
+    "text": "drop my core.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 drop my core."
+  },
+  {
+    "start": 55.37,
+    "end": 56.97,
+    "text": "ever confused the car first.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 ever confused the car first."
+  },
+  {
+    "start": 57.54,
+    "end": 57.79,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 58.75,
+    "end": 60.65,
+    "text": "Well, when I drive my body...",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Well, when I drive my body..."
+  },
+  {
+    "start": 61.24,
+    "end": 64.2,
+    "text": "Why did you confuse me for my body?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Why did you confuse me for my body?"
+  },
+  {
+    "start": 65.02,
+    "end": 65.94,
+    "text": "It's mine.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 It's mine."
+  },
+  {
+    "start": 68.08,
+    "end": 68.55,
+    "text": "me",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 me"
+  },
+  {
+    "start": 69.6,
+    "end": 73.44,
+    "text": "down so your bodies are just cars that we operate and drive around.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 down so your bodies are just cars that we operate and drive around."
+  },
+  {
+    "start": 74.02,
+    "end": 77.39,
+    "text": "the dealership we cost society to set it to label mine.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 the dealership we cost society to set it to label mine."
+  },
+  {
+    "start": 79.11,
+    "end": 80.86,
+    "text": "yours the Irish oh white",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 yours the Irish oh white"
+  },
+  {
+    "start": 82.03,
+    "end": 84.37,
+    "text": "No money down 0% APR.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 No money down 0% APR."
+  },
+  {
+    "start": 84.79,
+    "end": 86.26,
+    "text": "head strike. We're not forced.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 head strike. We're not forced."
+  },
+  {
+    "start": 86.9,
+    "end": 88.86,
+    "text": "course for the rest of our lives.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 course for the rest of our lives."
+  },
+  {
+    "start": 90.34,
+    "end": 92.37,
+    "text": "but I fail to see the logic or pride.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 but I fail to see the logic or pride."
+  },
+  {
+    "start": 92.88,
+    "end": 94.16,
+    "text": "defining myself.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 defining myself."
+  },
+  {
+    "start": 94.56,
+    "end": 96.88,
+    "text": "judge in another by the cars we drive.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 judge in another by the cars we drive."
+  },
+  {
+    "start": 97.95,
+    "end": 99.2,
+    "text": "of who we truly are.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 of who we truly are."
+  },
+  {
+    "start": 100.02,
+    "end": 101.05,
+    "text": "It's found inside.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 It's found inside."
+  },
+  {
+    "start": 102.01,
+    "end": 105.01,
+    "text": "Listen, I'm not here to tell you how science is conclu-",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Listen, I'm not here to tell you how science is conclu-"
+  },
+  {
+    "start": 106.11,
+    "end": 106.62,
+    "text": "We're all making.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 We're all making."
+  },
+  {
+    "start": 107.17,
+    "end": 109.38,
+    "text": "Great than the human species, doesn't exist.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Great than the human species, doesn't exist."
+  },
+  {
+    "start": 109.93,
+    "end": 110.82,
+    "text": "Whoever his story is.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Whoever his story is."
+  },
+  {
+    "start": 111.48,
+    "end": 111.85,
+    "text": "Ready?",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Ready?"
+  },
+  {
+    "start": 112.8,
+    "end": 113.73,
+    "text": "the 15th century.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 the 15th century."
+  },
+  {
+    "start": 115.84,
+    "end": 117.46,
+    "text": "It has worked perfectly, no.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 It has worked perfectly, no."
+  },
+  {
+    "start": 119.0,
+    "end": 119.51,
+    "text": "and I'll hit a leg.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 and I'll hit a leg."
+  },
+  {
+    "start": 121.06,
+    "end": 121.61,
+    "text": "one at hand.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 one at hand."
+  },
+  {
+    "start": 122.14,
+    "end": 122.51,
+    "text": "Thank you.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Thank you."
+  },
+  {
+    "start": 124.22,
+    "end": 124.49,
+    "text": "Have a great day.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Have a great day."
+  },
+  {
+    "start": 128.23,
+    "end": 128.56,
+    "text": "gave you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 gave you."
+  },
+  {
+    "start": 129.36,
+    "end": 129.64,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 131.72,
+    "end": 131.98,
+    "text": "black.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 black."
+  },
+  {
+    "start": 133.14,
+    "end": 134.78,
+    "text": "Asian Native American Middle",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Asian Native American Middle"
+  },
+  {
+    "start": 135.95,
+    "end": 136.25,
+    "text": "No.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 No."
+  },
+  {
+    "start": 138.9,
+    "end": 139.23,
+    "text": "together.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 together."
+  },
+  {
+    "start": 140.02,
+    "end": 141.09,
+    "text": "no longer living in the...",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 no longer living in the..."
+  },
+  {
+    "start": 141.97,
+    "end": 143.23,
+    "text": "calling human beings.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 calling human beings."
+  },
+  {
+    "start": 147.24,
+    "end": 149.94,
+    "text": "Ever blind us from seeing a person for who they are.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Ever blind us from seeing a person for who they are."
+  },
+  {
+    "start": 150.52,
+    "end": 152.42,
+    "text": "instead of saying them from the judge.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 instead of saying them from the judge."
+  },
+  {
+    "start": 152.99,
+    "end": 155.29,
+    "text": "Oh, pretty tissue, artificial filters on it.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Oh, pretty tissue, artificial filters on it."
+  },
+  {
+    "start": 157.31,
+    "end": 160.32,
+    "text": "When you let an artificial label define yourself.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 When you let an artificial label define yourself."
+  },
+  {
+    "start": 160.91,
+    "end": 240.02,
+    "text": "that my friend who have chosen smallness of a greatness and minimized your self, confide and divided your self from others. And it is an undeniable fact that whether it's division there will be conflict and conflict starts wars, therefore every war has started over labels, it's always us versus them. So the answer to war, racism, sexism, and every other is a myth so simple that every politician has missed it. It's the labels. We must rip them off. Isn't it funny how no baby is born racist? Yet every baby cries when they hear the cries of another. No matter the gender, culture or color, proven the deep down, we were meant to connect and care for each other. That is our mission. And that is not my opinion. That is the truth in the world that has sold us fiction. Please listen, labels only distort our vision, which is why half of those watching this will dismiss it or feel resistance and conflicted, but just remember, So did the counter pillar. Before it broke through its shell and became the magnificent butterfly, well these labels are our shells and we must do the same thing. So we can finally spread our wings. Human beings were not meant to be slapped with labels like groceries and supermarkets. DNA cannot be regulated by the FDA. We were meant to be free and only in the world.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 that my friend who have chosen smallness of a greatness and minimized your self, confide and divided your self from others. And it is an undeniable fact that whether it's division there will be conflict and conflict starts wars, therefore every war has started over labels, it's always us versus them. So the answer to war, racism, sexism, and every other is a myth so simple that every politician has missed it. It's the labels. We must rip them off. Isn't it funny how no baby is born racist? Yet every baby cries when they hear the cries of another. No matter the gender, culture or color, proven the deep down, we were meant to connect and care for each other. That is our mission. And that is not my opinion. That is the truth in the world that has sold us fiction. Please listen, labels only distort our vision, which is why half of those watching this will dismiss it or feel resistance and conflicted, but just remember, So did the counter pillar. Before it broke through its shell and became the magnificent butterfly, well these labels are our shells and we must do the same thing. So we can finally spread our wings. Human beings were not meant to be slapped with labels like groceries and supermarkets. DNA cannot be regulated by the FDA. We were meant to be free and only in the world."
+  },
+  {
+    "start": 240.49,
+    "end": 241.44,
+    "text": "It moves them all.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 It moves them all."
+  },
+  {
+    "start": 241.96,
+    "end": 242.25,
+    "text": "living.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 living."
+  },
+  {
+    "start": 242.9,
+    "end": 243.93,
+    "text": "So smart.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 So smart."
+  },
+  {
+    "start": 245.96,
+    "end": 247.51,
+    "text": "You can figure out what's there on with each other.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 You can figure out what's there on with each other."
+  },
+  {
+    "start": 248.02,
+    "end": 248.41,
+    "text": "for who?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 for who?"
+  },
+  {
+    "start": 258.72,
+    "end": 265.89,
+    "text": "So what can we do in the face of all this madness and cannot what is the solution? We can love.",
+    "mood_tag": "[HAPPY]\ud83d\ude0a",
+    "scene_type": "music_only",
+    "annotated_text": "[HAPPY]\ud83d\ude0a So what can we do in the face of all this madness and cannot what is the solution? We can love."
+  },
+  {
+    "start": 266.41,
+    "end": 269.1,
+    "text": "trying to control the mind is like trying to flex.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 trying to control the mind is like trying to flex."
+  },
+  {
+    "start": 270.2,
+    "end": 270.6,
+    "text": "Just make it.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Just make it."
+  }
+]

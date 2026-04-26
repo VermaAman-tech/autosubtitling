@@ -1,0 +1,90 @@
+[
+  {
+    "start": 13.82,
+    "end": 14.17,
+    "text": "Go ahead.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Go ahead."
+  },
+  {
+    "start": 44.95,
+    "end": 60.62,
+    "text": "I'm... Spider. Get out of the way! Take me with the bitch! Get you a bitch, bitch! Get you a bitch, bitch!",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 I'm... Spider. Get out of the way! Take me with the bitch! Get you a bitch, bitch! Get you a bitch, bitch!"
+  },
+  {
+    "start": 62.99,
+    "end": 66.37,
+    "text": "And sometimes Spider-Man has to...",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 And sometimes Spider-Man has to..."
+  },
+  {
+    "start": 67.58,
+    "end": 67.9,
+    "text": "even if it.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 even if it."
+  },
+  {
+    "start": 68.7,
+    "end": 72.0,
+    "text": "is hard.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 is hard."
+  },
+  {
+    "start": 73.64,
+    "end": 74.12,
+    "text": "Thank you.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Thank you."
+  },
+  {
+    "start": 77.83,
+    "end": 96.29,
+    "text": "Oh, God. Oh, God. Oh, God. Oh, God. Excuse me, Dr. Batter? I need your help. What do you say your name was? 15A's, Mewtwo.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Oh, God. Oh, God. Oh, God. Oh, God. Excuse me, Dr. Batter? I need your help. What do you say your name was? 15A's, Mewtwo."
+  },
+  {
+    "start": 96.91,
+    "end": 143.82,
+    "text": "enormously dangerous. Spiders have three life cycles. When between cycles, it can be despite a vulnerable to threats. We are faced with a danger, but we can't control. One we can't even see. Stay out of my way. You lose in a kid and for those spiders who make it through, it amounts to a kind of... Re-birth. Nice flower. Nice flower.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 enormously dangerous. Spiders have three life cycles. When between cycles, it can be despite a vulnerable to threats. We are faced with a danger, but we can't control. One we can't even see. Stay out of my way. You lose in a kid and for those spiders who make it through, it amounts to a kind of... Re-birth. Nice flower. Nice flower."
+  },
+  {
+    "start": 145.86,
+    "end": 146.12,
+    "text": ".",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 ."
+  },
+  {
+    "start": 146.76,
+    "end": 147.2,
+    "text": "Bye bye.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Bye bye."
+  },
+  {
+    "start": 151.05,
+    "end": 152.39,
+    "text": "Okay.",
+    "mood_tag": "[SILENCE]\ud83e\udd2b",
+    "scene_type": "silence",
+    "annotated_text": "[SILENCE]\ud83e\udd2b Okay."
+  }
+]

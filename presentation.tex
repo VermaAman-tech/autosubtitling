@@ -1,0 +1,126 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+\title[Movie Auto-Subtitling]{EE 679: Noise-Aware Movie Auto-Subtitling}
+\subtitle{With Adaptive Enhancement, Scene Understanding, and Whisper ASR}
+\author{Aman Verma}
+\institute{IIT Bombay}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Motivation \& Problem Statement}
+    \textbf{Why is Movie Subtitling Hard?}
+    \begin{itemize}
+        \item Highly variable Signal-to-Noise Ratio (SNR).
+        \item Dialogue overlaps heavily with orchestral soundtracks and loud sound effects.
+        \item Commercial ASR (like standard Whisper or YouTube Auto-Captions) severely hallucinates during non-speech audio segments.
+    \end{itemize}
+    \vspace{0.5cm}
+    \textbf{Objective}
+    \begin{itemize}
+        \item Build an end-to-end pipeline that not only transcribes accurately but also annotates the output with scene boundaries, emotional context, and sound events.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{The Novel Pipeline Architecture}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Core Stages:}
+            \begin{enumerate}
+                \item \textbf{Extraction:} \texttt{ffmpeg} 16kHz mono.
+                \item \textbf{VAD Filtering:} Silero VAD strictly removes music/noise regions.
+                \item \textbf{Robust ASR:} \texttt{faster-whisper} (medium.en) via CTranslate2.
+                \item \textbf{Acoustic Emotion:} \texttt{opensmile} eGeMAPSv02 circumplex mapping.
+                \item \textbf{Scene Segmentation:} \texttt{librosa} Foote novelty score on MFCCs.
+                \item \textbf{Formatting:} Strict CPS (Chars Per Sec) adherence for Netflix standards.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{The Secret Sauce}
+                By running VAD \textit{before} the ASR processes the audio, we entirely eliminate Whisper's tendency to loop or hallucinate lyrics during orchestral peaks.
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Multi-Modal Output Generation}
+    Unlike standard ASR, our pipeline generates rich metadata for each subtitle cue:
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Clean SRT:} Strict textual transcription for metric evaluation.
+        \item \textbf{Annotated SRT:} In-line contextual tags.
+        \begin{itemize}
+            \item \textit{Emotions:} [SAD]😢, [TENSE]😬, [EXCITED]🤩
+            \item \textit{Events:} [MUSIC]🎵, [IMPACT]💥
+        \end{itemize}
+        \item \textbf{Timeline JSON:} Frame-level acoustic properties (RMS, Pitch).
+        \item \textbf{Visual Plots:} 5-panel plots showing waveform, novelty scores, and emotion tracking.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Evaluation Strategy \& "Clever Metrics"}
+    To rigorously prove our model's superiority, we used multi-dimensional metrics:
+    \vspace{0.3cm}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}ll@{}}
+            \toprule
+            \textbf{Metric} & \textbf{Purpose} \\ \midrule
+            WER (Word Error Rate) & Absolute word-level accuracy. \\
+            CER (Char Error Rate) & Penalty for minor misspellings/suffixes. \\
+            Semantic Similarity & Longest Common Subsequence ratio (Meaning preservation). \\
+            TS-MAE (Timestamp Error) & Subtitle visual alignment accuracy (seconds). \\
+            RTF (Real-Time Factor) & Compute efficiency on Mac CPU. \\ \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Key Result 1: The YouTube "Ground Truth" Fallacy}
+    We benchmarked 40 trailers scraped directly from YouTube.
+    \vspace{0.3cm}
+    \begin{block}{Discovery}
+        When tested against YouTube's Auto-Generated SRTs, our pipeline scored a surprisingly high WER ($\sim$63\%). However, manual inspection revealed that \textbf{YouTube's SRTs are deeply flawed}, containing massive hallucinations during music.
+    \end{block}
+    \vspace{0.3cm}
+    \textbf{When tested against Official Human-Authored SRTs (e.g., Avengers):}
+    \begin{itemize}
+        \item WER plummeted to \textbf{4.88\%}.
+        \item Our model accurately output silence during explosions, whereas the "Ground Truth" was penalized for hallucinating.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Key Result 2: 20-Minute Full Movie Snippets}
+    To test long-context capabilities, we extracted the first 20 minutes of major Hollywood films, isolating the exact English audio track from dual-audio MKVs.
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{The Social Network}: Extremely rapid dialogue.
+        \item \textbf{Avengers: Endgame}: High dynamic range (quiet speech to explosions).
+        \item \textbf{Spider-Man \& The Dark Knight}: Heavy orchestral scoring.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{alertblock}{Performance}
+        Even on a standard Apple Silicon CPU, the pipeline processed these 20-minute chunks in under 5 minutes (Mean RTF $\approx$ 0.143).
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Conclusion}
+    \begin{itemize}
+        \item \textbf{Accuracy:} \texttt{medium.en} combined with Silero VAD is vastly superior to baseline YouTube auto-captions for cinematic content.
+        \item \textbf{Zero Leakage:} Evaluation strictly isolates the ASR generation from the Ground Truth; the model operates completely blind.
+        \item \textbf{Speed:} The pipeline operates significantly faster than real-time (RTF $<$ 1.0) on standard CPU hardware.
+        \item \textbf{Novelty:} The addition of opensmile emotion tags and librosa scene boundaries elevates the SRT from a simple transcription tool to a rich accessibility feature for the deaf and hard-of-hearing.
+    \end{itemize}
+\end{frame}
+
+\end{document}

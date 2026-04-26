@@ -1,0 +1,16 @@
+{
+  "duration_sec": 186.59,
+  "dominant_mood": "epic",
+  "music_fraction": 0.161,
+  "speech_fraction": 0.043,
+  "silence_fraction": 0.0,
+  "mood_counts": {
+    "epic": 12,
+    "neutral": 1,
+    "calm": 2,
+    "happy": 1
+  },
+  "n_segments": 16,
+  "n_boundaries": 15,
+  "compute_ms": 4252.9
+}

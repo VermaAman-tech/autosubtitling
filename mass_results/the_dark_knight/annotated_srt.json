@@ -1,0 +1,98 @@
+[
+  {
+    "start": 9.08,
+    "end": 9.71,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 15.51,
+    "end": 17.46,
+    "text": "everyone. It's coming back.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 everyone. It's coming back."
+  },
+  {
+    "start": 25.62,
+    "end": 26.0,
+    "text": "No.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 No."
+  },
+  {
+    "start": 26.54,
+    "end": 29.06,
+    "text": "Change.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Change."
+  },
+  {
+    "start": 30.37,
+    "end": 31.08,
+    "text": "I'm wrong.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 I'm wrong."
+  },
+  {
+    "start": 33.11,
+    "end": 34.69,
+    "text": "Tango, I believe.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Tango, I believe."
+  },
+  {
+    "start": 36.24,
+    "end": 37.4,
+    "text": "Bring it to it.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Bring it to it."
+  },
+  {
+    "start": 38.5,
+    "end": 43.43,
+    "text": "Extreme.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Extreme."
+  },
+  {
+    "start": 73.86,
+    "end": 74.31,
+    "text": "happen.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 happen."
+  },
+  {
+    "start": 76.92,
+    "end": 112.26,
+    "text": "the the the the the Now I'm free!",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 the the the the the Now I'm free!"
+  },
+  {
+    "start": 113.49,
+    "end": 114.13,
+    "text": "to the line.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 to the line."
+  },
+  {
+    "start": 115.38,
+    "end": 126.37,
+    "text": "The strings on me.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 The strings on me."
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "noise_classifier": {
+    "overall_accuracy": 0.3156,
+    "per_class": {
+      "babble": 0.0,
+      "music/soundtrack": 0.4,
+      "pink_noise": 0.0,
+      "silence": 1.0,
+      "white_noise": 0.52
+    }
+  },
+  "streaming": {
+    "first_word_latency_ms": {
+      "batch": 254.5167,
+      "stream_1.0s": 195.4667,
+      "stream_2.0s": 186.0833,
+      "stream_3.0s": 202.7833,
+      "stream_5.0s": 232.85
+    },
+    "wer": {
+      "batch": 0.1744,
+      "stream_1.0s": 0.6066,
+      "stream_2.0s": 0.3241,
+      "stream_3.0s": 0.2907,
+      "stream_5.0s": 0.2619
+    },
+    "rtf": {
+      "batch": 0.0317,
+      "stream_1.0s": 0.2602,
+      "stream_2.0s": 0.2322,
+      "stream_3.0s": 0.0872,
+      "stream_5.0s": 0.1424
+    }
+  }
+}

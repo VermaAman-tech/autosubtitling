@@ -1,0 +1,22 @@
+{
+  "slug": "bridesmaids",
+  "duration_sec": 130.06,
+  "vad_segments": 29,
+  "speech_ratio": 0.7,
+  "pred_cues": 22,
+  "ref_cues": 90,
+  "wer": 0.8921,
+  "cer": 0.7999,
+  "ts_mae_sec": 32.666,
+  "cps_violations": 10,
+  "asr_rtf_mean": 0.3856,
+  "asr_rtf_overall": 0.0782,
+  "asr_total_inf_ms": 6318.1,
+  "enhanced_segs": 12,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.052,
+  "scene_speech_fraction": 0.25,
+  "scene_n_segments": 22,
+  "scene_n_boundaries": 21,
+  "scene_compute_ms": 2989.2
+}

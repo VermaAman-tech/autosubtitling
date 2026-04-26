@@ -1,0 +1,50 @@
+[
+  {
+    "start": 4.29,
+    "end": 5.23,
+    "text": "What we're going to do is...",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 What we're going to do is..."
+  },
+  {
+    "start": 14.03,
+    "end": 14.51,
+    "text": "See you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 See you."
+  },
+  {
+    "start": 41.85,
+    "end": 47.24,
+    "text": "In time. In time.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 In time. In time."
+  },
+  {
+    "start": 49.11,
+    "end": 49.47,
+    "text": "like",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 like"
+  },
+  {
+    "start": 54.63,
+    "end": 55.15,
+    "text": "Okay.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Okay."
+  },
+  {
+    "start": 55.74,
+    "end": 133.8,
+    "text": "I'm going to save you. Read it. Run, Fummit. That's who you still belong to. We've got to read the city. In case not the fences.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 I'm going to save you. Read it. Run, Fummit. That's who you still belong to. We've got to read the city. In case not the fences."
+  }
+]

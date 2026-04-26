@@ -1,0 +1,122 @@
+[
+  {
+    "start": 6.99,
+    "end": 9.13,
+    "text": "It's fun!",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 It's fun!"
+  },
+  {
+    "start": 10.78,
+    "end": 11.03,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 13.27,
+    "end": 14.67,
+    "text": "This is our help now.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 This is our help now."
+  },
+  {
+    "start": 15.83,
+    "end": 16.13,
+    "text": "Okay.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Okay."
+  },
+  {
+    "start": 16.63,
+    "end": 17.36,
+    "text": "Come on!",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Come on!"
+  },
+  {
+    "start": 18.12,
+    "end": 20.22,
+    "text": "I think I did that! Where did you keep moving?",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 I think I did that! Where did you keep moving?"
+  },
+  {
+    "start": 21.62,
+    "end": 22.62,
+    "text": "And why?",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 And why?"
+  },
+  {
+    "start": 23.9,
+    "end": 25.75,
+    "text": "I swear.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 I swear."
+  },
+  {
+    "start": 27.33,
+    "end": 27.63,
+    "text": ".",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 ."
+  },
+  {
+    "start": 31.54,
+    "end": 32.69,
+    "text": "Damn it, why?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Damn it, why?"
+  },
+  {
+    "start": 33.4,
+    "end": 49.48,
+    "text": "Oh, Arthur, stop it! Stop it! Stop it! Stop it! I'm gonna have to be the best one to get out of here. I'm gonna have to be the best one to get out of here.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Oh, Arthur, stop it! Stop it! Stop it! Stop it! I'm gonna have to be the best one to get out of here. I'm gonna have to be the best one to get out of here."
+  },
+  {
+    "start": 51.55,
+    "end": 54.22,
+    "text": "What are you doing? What are you doing? What are you doing?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 What are you doing? What are you doing? What are you doing?"
+  },
+  {
+    "start": 56.11,
+    "end": 56.46,
+    "text": ".",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 ."
+  },
+  {
+    "start": 57.35,
+    "end": 58.19,
+    "text": "I got you a lot.",
+    "mood_tag": "",
+    "scene_type": "unknown",
+    "annotated_text": "I got you a lot."
+  },
+  {
+    "start": 59.16,
+    "end": 69.95,
+    "text": "Aah ha ha ha ha ha ha! Hey, try to get at one of these main stuff. We've already got a new-",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Aah ha ha ha ha ha ha! Hey, try to get at one of these main stuff. We've already got a new-"
+  }
+]

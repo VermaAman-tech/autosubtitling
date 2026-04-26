@@ -1,0 +1,22 @@
+{
+  "slug": "whiplash",
+  "duration_sec": 186.59,
+  "vad_segments": 38,
+  "speech_ratio": 0.7,
+  "pred_cues": 24,
+  "ref_cues": 93,
+  "wer": 0.8603,
+  "cer": 0.7747,
+  "ts_mae_sec": 41.763,
+  "cps_violations": 5,
+  "asr_rtf_mean": 0.3275,
+  "asr_rtf_overall": 0.0745,
+  "asr_total_inf_ms": 8741.7,
+  "enhanced_segs": 10,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.161,
+  "scene_speech_fraction": 0.043,
+  "scene_n_segments": 16,
+  "scene_n_boundaries": 15,
+  "scene_compute_ms": 4225.6
+}

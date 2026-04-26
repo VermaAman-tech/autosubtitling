@@ -1,0 +1,22 @@
+{
+  "slug": "mad_max_fury_road",
+  "duration_sec": 150.0,
+  "vad_segments": 31,
+  "speech_ratio": 0.7,
+  "pred_cues": 19,
+  "ref_cues": 69,
+  "wer": 0.895,
+  "cer": 0.8164,
+  "ts_mae_sec": 41.48,
+  "cps_violations": 6,
+  "asr_rtf_mean": 0.3864,
+  "asr_rtf_overall": 0.0856,
+  "asr_total_inf_ms": 7897.2,
+  "enhanced_segs": 2,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.021,
+  "scene_speech_fraction": 0.337,
+  "scene_n_segments": 41,
+  "scene_n_boundaries": 40,
+  "scene_compute_ms": 3431.6
+}

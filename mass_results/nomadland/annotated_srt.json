@@ -1,0 +1,274 @@
+[
+  {
+    "start": 1.01,
+    "end": 4.57,
+    "text": "I hate California. I'm gonna go get me in the car.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 I hate California. I'm gonna go get me in the car."
+  },
+  {
+    "start": 5.18,
+    "end": 9.23,
+    "text": "with culture and like, we need a little bit of race or a seat. I'm not a bit of a seat.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 with culture and like, we need a little bit of race or a seat. I'm not a bit of a seat."
+  },
+  {
+    "start": 10.9,
+    "end": 13.67,
+    "text": "I'm just going to go to the bany boy. Just go to the bany boy.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 I'm just going to go to the bany boy. Just go to the bany boy."
+  },
+  {
+    "start": 14.98,
+    "end": 17.08,
+    "text": "I think she's got a pretty common demand in jail.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 I think she's got a pretty common demand in jail."
+  },
+  {
+    "start": 18.45,
+    "end": 18.72,
+    "text": ".",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 ."
+  },
+  {
+    "start": 19.22,
+    "end": 20.66,
+    "text": "Pull yourself up, daddy.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Pull yourself up, daddy."
+  },
+  {
+    "start": 33.38,
+    "end": 33.74,
+    "text": "and I was...",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 and I was..."
+  },
+  {
+    "start": 41.59,
+    "end": 43.1,
+    "text": "That's amazing. Back.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 That's amazing. Back."
+  },
+  {
+    "start": 44.3,
+    "end": 45.18,
+    "text": "She is a big heart.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 She is a big heart."
+  },
+  {
+    "start": 46.71,
+    "end": 47.1,
+    "text": "which is also.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 which is also."
+  },
+  {
+    "start": 50.27,
+    "end": 52.07,
+    "text": "So",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 So"
+  },
+  {
+    "start": 52.56,
+    "end": 52.82,
+    "text": "I'm not.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 I'm not."
+  },
+  {
+    "start": 53.87,
+    "end": 54.57,
+    "text": "have the college.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 have the college."
+  },
+  {
+    "start": 55.56,
+    "end": 55.9,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 56.67,
+    "end": 57.3,
+    "text": "a little bit.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 a little bit."
+  },
+  {
+    "start": 57.79,
+    "end": 58.09,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 61.43,
+    "end": 61.7,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 66.25,
+    "end": 67.06,
+    "text": "I'm not tired.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 I'm not tired."
+  },
+  {
+    "start": 68.0,
+    "end": 68.42,
+    "text": "Thank you.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Thank you."
+  },
+  {
+    "start": 72.16,
+    "end": 73.5,
+    "text": "Alright. Got it.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Alright. Got it."
+  },
+  {
+    "start": 73.92,
+    "end": 74.78,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 82.62,
+    "end": 82.98,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 84.46,
+    "end": 89.49,
+    "text": "I don't need to do that. I wanted it to be special. Why?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 I don't need to do that. I wanted it to be special. Why?"
+  },
+  {
+    "start": 91.07,
+    "end": 95.81,
+    "text": "So, I'm going to smash the thanks to you, man. We're afraid.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 So, I'm going to smash the thanks to you, man. We're afraid."
+  },
+  {
+    "start": 99.27,
+    "end": 105.36,
+    "text": "It's never enough. It is enough. For a frayed of what the future will frayed. We're afraid.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 It's never enough. It is enough. For a frayed of what the future will frayed. We're afraid."
+  },
+  {
+    "start": 106.01,
+    "end": 118.74,
+    "text": "Mom? No, no, no, no, no, no, no, no, no, no, no, no, no. You want to relax? No, you want to come on and say that I'm totally patient. What the heck? You're so glad to see. You've lost the fear.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Mom? No, no, no, no, no, no, no, no, no, no, no, no, no. You want to relax? No, you want to come on and say that I'm totally patient. What the heck? You're so glad to see. You've lost the fear."
+  },
+  {
+    "start": 119.28,
+    "end": 119.62,
+    "text": "I want to move.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 I want to move."
+  },
+  {
+    "start": 120.18,
+    "end": 120.43,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 121.16,
+    "end": 121.53,
+    "text": "very",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 very"
+  },
+  {
+    "start": 122.82,
+    "end": 129.08,
+    "text": "Would you be me?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Would you be me?"
+  },
+  {
+    "start": 129.75,
+    "end": 130.98,
+    "text": "This is the best version.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 This is the best version."
+  },
+  {
+    "start": 133.02,
+    "end": 133.83,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 135.6,
+    "end": 136.08,
+    "text": "Yeah.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Yeah."
+  },
+  {
+    "start": 143.35,
+    "end": 149.53,
+    "text": "Yeah.",
+    "mood_tag": "[HAPPY]\ud83d\ude0a",
+    "scene_type": "music_only",
+    "annotated_text": "[HAPPY]\ud83d\ude0a Yeah."
+  }
+]

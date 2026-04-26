@@ -1,0 +1,138 @@
+[
+  {
+    "start": 13.52,
+    "end": 15.82,
+    "text": "Specialized, very specific time.",
+    "mood_tag": "[NEUTRAL]\ud83d\ude10",
+    "scene_type": "transition",
+    "annotated_text": "[NEUTRAL]\ud83d\ude10 Specialized, very specific time."
+  },
+  {
+    "start": 18.68,
+    "end": 19.04,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 21.62,
+    "end": 21.87,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 29.6,
+    "end": 31.33,
+    "text": "Mr. Car has a job",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Mr. Car has a job"
+  },
+  {
+    "start": 32.4,
+    "end": 32.95,
+    "text": "discussed.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 discussed."
+  },
+  {
+    "start": 33.53,
+    "end": 39.47,
+    "text": "We've got a workplace room.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 We've got a workplace room."
+  },
+  {
+    "start": 42.62,
+    "end": 43.04,
+    "text": "create.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 create."
+  },
+  {
+    "start": 43.99,
+    "end": 44.29,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 47.53,
+    "end": 47.97,
+    "text": "Let me bring this up.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Let me bring this up."
+  },
+  {
+    "start": 50.34,
+    "end": 51.52,
+    "text": "and they can deliver their seat.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 and they can deliver their seat."
+  },
+  {
+    "start": 53.58,
+    "end": 54.65,
+    "text": "Then you break it and still it.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Then you break it and still it."
+  },
+  {
+    "start": 56.41,
+    "end": 59.86,
+    "text": "It's not strictly speaking legal.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 It's not strictly speaking legal."
+  },
+  {
+    "start": 60.88,
+    "end": 62.56,
+    "text": "That's called",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 That's called"
+  },
+  {
+    "start": 66.11,
+    "end": 68.21,
+    "text": "Already",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Already"
+  },
+  {
+    "start": 68.72,
+    "end": 113.6,
+    "text": "I think I found a way home. And this last job, that's how I get there. Dreams feel real while we're in the park. It's only when we wake up that we realize something is actually strange. This is our responsibility. They're not prepared for this. Dreams collapsing.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 I think I found a way home. And this last job, that's how I get there. Dreams feel real while we're in the park. It's only when we wake up that we realize something is actually strange. This is our responsibility. They're not prepared for this. Dreams collapsing."
+  },
+  {
+    "start": 128.08,
+    "end": 130.26,
+    "text": "You",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 You"
+  },
+  {
+    "start": 133.11,
+    "end": 134.95,
+    "text": "mustn't be afraid to dream with a big adult.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 mustn't be afraid to dream with a big adult."
+  }
+]

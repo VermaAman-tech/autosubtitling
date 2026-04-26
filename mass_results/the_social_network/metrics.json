@@ -1,0 +1,22 @@
+{
+  "slug": "the_social_network",
+  "duration_sec": 80.82,
+  "vad_segments": 21,
+  "speech_ratio": 0.7,
+  "pred_cues": 15,
+  "ref_cues": 28,
+  "wer": 0.9323,
+  "cer": 0.7612,
+  "ts_mae_sec": 11.818,
+  "cps_violations": 3,
+  "asr_rtf_mean": 0.3804,
+  "asr_rtf_overall": 0.2293,
+  "asr_total_inf_ms": 11555.0,
+  "enhanced_segs": 14,
+  "scene_dominant_mood": "dialogue",
+  "scene_music_fraction": 0.01,
+  "scene_speech_fraction": 0.415,
+  "scene_n_segments": 35,
+  "scene_n_boundaries": 36,
+  "scene_compute_ms": 1959.1
+}

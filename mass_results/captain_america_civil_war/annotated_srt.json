@@ -1,0 +1,66 @@
+[
+  {
+    "start": 17.6,
+    "end": 17.9,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 21.87,
+    "end": 22.22,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 28.03,
+    "end": 43.92,
+    "text": "We got one advantage. He's coming to us. We have a Thanos.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 We got one advantage. He's coming to us. We have a Thanos."
+  },
+  {
+    "start": 44.61,
+    "end": 53.95,
+    "text": "So that's what we is.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 So that's what we is."
+  },
+  {
+    "start": 63.22,
+    "end": 71.13,
+    "text": "I'll be in.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 I'll be in."
+  },
+  {
+    "start": 71.93,
+    "end": 82.13,
+    "text": "Here.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Here."
+  },
+  {
+    "start": 82.54,
+    "end": 96.54,
+    "text": "That's the only thing he was gonna do. He beat me back. As well.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 That's the only thing he was gonna do. He beat me back. As well."
+  },
+  {
+    "start": 127.57,
+    "end": 127.91,
+    "text": "I am.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 I am."
+  }
+]

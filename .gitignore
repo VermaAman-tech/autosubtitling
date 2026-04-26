@@ -29,3 +29,7 @@ outputs/synthetic_movie_reel.wav
 data/downloads/
 data/raw/
 data/processed/
+movies/
+youtube_trailers/
+evaluate_results/
+

@@ -1,0 +1,4 @@
+method,pesq,stoi
+noisy,1.7779,0.8789
+spectral_sub,2.0929,0.8779
+wiener,1.212,0.7987

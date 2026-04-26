@@ -1,0 +1,154 @@
+[
+  {
+    "start": 13.48,
+    "end": 20.3,
+    "text": "Where do we begin?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Where do we begin?"
+  },
+  {
+    "start": 24.46,
+    "end": 25.6,
+    "text": "air crossing.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 air crossing."
+  },
+  {
+    "start": 26.68,
+    "end": 29.64,
+    "text": "What happened?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 What happened?"
+  },
+  {
+    "start": 44.45,
+    "end": 45.51,
+    "text": "This is hard.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 This is hard."
+  },
+  {
+    "start": 47.11,
+    "end": 47.38,
+    "text": "about.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 about."
+  },
+  {
+    "start": 47.95,
+    "end": 52.58,
+    "text": "I'm gonna certainly hope not. You almost told...",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 I'm gonna certainly hope not. You almost told..."
+  },
+  {
+    "start": 53.51,
+    "end": 54.07,
+    "text": "We'll see you in a minute.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 We'll see you in a minute."
+  },
+  {
+    "start": 55.16,
+    "end": 59.13,
+    "text": "to make me your only hope for normal life.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 to make me your only hope for normal life."
+  },
+  {
+    "start": 60.21,
+    "end": 60.49,
+    "text": "Thank you very much.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 Thank you very much."
+  },
+  {
+    "start": 62.07,
+    "end": 62.37,
+    "text": "Any second.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Any second."
+  },
+  {
+    "start": 62.94,
+    "end": 67.41,
+    "text": "Your boyfriends are should be aware of. Oh, you like the dumb idea.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Your boyfriends are should be aware of. Oh, you like the dumb idea."
+  },
+  {
+    "start": 71.29,
+    "end": 76.77,
+    "text": "We are tonight's entertainment.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 We are tonight's entertainment."
+  },
+  {
+    "start": 78.37,
+    "end": 80.67,
+    "text": "Wow.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Wow."
+  },
+  {
+    "start": 81.77,
+    "end": 83.16,
+    "text": "You",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 You"
+  },
+  {
+    "start": 92.83,
+    "end": 94.82,
+    "text": "And God is coming.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 And God is coming."
+  },
+  {
+    "start": 99.04,
+    "end": 125.75,
+    "text": "Go. Come on. This city deserves a better class of criminal. I'm going to give it to him. No. I don't see. I'll show you. Do either die a hero or you live?",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 Go. Come on. This city deserves a better class of criminal. I'm going to give it to him. No. I don't see. I'll show you. Do either die a hero or you live?"
+  },
+  {
+    "start": 126.26,
+    "end": 126.7,
+    "text": "We will see yourself.",
+    "mood_tag": "[DIALOGUE]\ud83d\udde3",
+    "scene_type": "dialogue",
+    "annotated_text": "[DIALOGUE]\ud83d\udde3 We will see yourself."
+  },
+  {
+    "start": 140.06,
+    "end": 141.1,
+    "text": "in the middle of the day.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 in the middle of the day."
+  },
+  {
+    "start": 146.35,
+    "end": 147.55,
+    "text": "settle.",
+    "mood_tag": "[HAPPY]\ud83d\ude0a",
+    "scene_type": "music_only",
+    "annotated_text": "[HAPPY]\ud83d\ude0a settle."
+  }
+]

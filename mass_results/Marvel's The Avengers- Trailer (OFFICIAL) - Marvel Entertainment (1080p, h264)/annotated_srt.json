@@ -1,0 +1,74 @@
+[
+  {
+    "start": 13.87,
+    "end": 16.39,
+    "text": "Oh",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Oh"
+  },
+  {
+    "start": 16.82,
+    "end": 18.74,
+    "text": "In the end.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 In the end."
+  },
+  {
+    "start": 19.36,
+    "end": 31.28,
+    "text": "It will be every man for himself.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 It will be every man for himself."
+  },
+  {
+    "start": 37.55,
+    "end": 46.16,
+    "text": "There was an idea to bring...",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 There was an idea to bring..."
+  },
+  {
+    "start": 46.59,
+    "end": 63.15,
+    "text": "a group of remarkable people. So when we needed them, they could fight the battles, and we never could.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 a group of remarkable people. So when we needed them, they could fight the battles, and we never could."
+  },
+  {
+    "start": 66.81,
+    "end": 67.16,
+    "text": "Thank you.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 Thank you."
+  },
+  {
+    "start": 71.76,
+    "end": 72.17,
+    "text": "no offense.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "dialogue",
+    "annotated_text": "[EPIC]\u26a1 no offense."
+  },
+  {
+    "start": 79.69,
+    "end": 96.14,
+    "text": "If we can't protect the Earth.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 If we can't protect the Earth."
+  },
+  {
+    "start": 97.88,
+    "end": 110.37,
+    "text": "I'm gonna get you out of here. I'm gonna get you out of here. I'm gonna get you out of here.",
+    "mood_tag": "[EPIC]\u26a1",
+    "scene_type": "action",
+    "annotated_text": "[EPIC]\u26a1 I'm gonna get you out of here. I'm gonna get you out of here. I'm gonna get you out of here."
+  }
+]

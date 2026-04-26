@@ -1,0 +1,22 @@
+{
+  "slug": "dunkirk",
+  "duration_sec": 144.13,
+  "vad_segments": 10,
+  "speech_ratio": 0.7,
+  "pred_cues": 6,
+  "ref_cues": 47,
+  "wer": 0.9634,
+  "cer": 0.8934,
+  "ts_mae_sec": 32.916,
+  "cps_violations": 1,
+  "asr_rtf_mean": 0.2356,
+  "asr_rtf_overall": 0.0433,
+  "asr_total_inf_ms": 4007.1,
+  "enhanced_segs": 4,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.027,
+  "scene_speech_fraction": 0.062,
+  "scene_n_segments": 21,
+  "scene_n_boundaries": 20,
+  "scene_compute_ms": 3413.5
+}

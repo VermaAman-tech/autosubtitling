@@ -1,0 +1,22 @@
+{
+  "slug": "captain_america_civil_war",
+  "duration_sec": 138.12,
+  "vad_segments": 11,
+  "speech_ratio": 0.7,
+  "pred_cues": 8,
+  "ref_cues": 44,
+  "wer": 0.95,
+  "cer": 0.8989,
+  "ts_mae_sec": 45.826,
+  "cps_violations": 2,
+  "asr_rtf_mean": 0.2325,
+  "asr_rtf_overall": 0.0712,
+  "asr_total_inf_ms": 6330.3,
+  "enhanced_segs": 4,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.029,
+  "scene_speech_fraction": 0.065,
+  "scene_n_segments": 15,
+  "scene_n_boundaries": 14,
+  "scene_compute_ms": 3427.2
+}

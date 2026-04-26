@@ -1,0 +1,22 @@
+{
+  "slug": "spider_man_into_spider_verse",
+  "duration_sec": 143.3,
+  "vad_segments": 25,
+  "speech_ratio": 0.7,
+  "pred_cues": 17,
+  "ref_cues": 41,
+  "wer": 0.7993,
+  "cer": 0.7164,
+  "ts_mae_sec": 27.598,
+  "cps_violations": 7,
+  "asr_rtf_mean": 0.2736,
+  "asr_rtf_overall": 0.0589,
+  "asr_total_inf_ms": 5274.2,
+  "enhanced_segs": 5,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.039,
+  "scene_speech_fraction": 0.017,
+  "scene_n_segments": 9,
+  "scene_n_boundaries": 8,
+  "scene_compute_ms": 3226.1
+}

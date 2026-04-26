@@ -1,0 +1,22 @@
+{
+  "slug": "avengers_age_of_ultron",
+  "duration_sec": 145.14,
+  "vad_segments": 22,
+  "speech_ratio": 0.7,
+  "pred_cues": 19,
+  "ref_cues": 53,
+  "wer": 0.8623,
+  "cer": 0.748,
+  "ts_mae_sec": 36.427,
+  "cps_violations": 7,
+  "asr_rtf_mean": 0.2475,
+  "asr_rtf_overall": 0.0917,
+  "asr_total_inf_ms": 9027.5,
+  "enhanced_segs": 14,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.0,
+  "scene_speech_fraction": 0.165,
+  "scene_n_segments": 20,
+  "scene_n_boundaries": 19,
+  "scene_compute_ms": 3362.0
+}

@@ -1,0 +1,22 @@
+{
+  "slug": "YTDown_YouTube_SPIDER-MAN-BRAND-NEW-DAY-Official-Traile_Media_8TZMtslA3UY_002_720p",
+  "duration_sec": 160.12,
+  "vad_segments": 21,
+  "speech_ratio": 0.7,
+  "pred_cues": 11,
+  "ref_cues": 18,
+  "wer": 0.6584,
+  "cer": 0.5288,
+  "ts_mae_sec": 46.06,
+  "cps_violations": 3,
+  "asr_rtf_mean": 0.2489,
+  "asr_rtf_overall": 0.0423,
+  "asr_total_inf_ms": 4178.3,
+  "enhanced_segs": 6,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.0,
+  "scene_speech_fraction": 0.324,
+  "scene_n_segments": 47,
+  "scene_n_boundaries": 47,
+  "scene_compute_ms": 3499.4
+}

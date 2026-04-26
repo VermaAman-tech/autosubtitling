@@ -1,0 +1,22 @@
+{
+  "slug": "nomadland",
+  "duration_sec": 153.05,
+  "vad_segments": 51,
+  "speech_ratio": 0.7,
+  "pred_cues": 34,
+  "ref_cues": 102,
+  "wer": 0.9451,
+  "cer": 0.8528,
+  "ts_mae_sec": 51.82,
+  "cps_violations": 17,
+  "asr_rtf_mean": 0.4027,
+  "asr_rtf_overall": 0.2137,
+  "asr_total_inf_ms": 17953.8,
+  "enhanced_segs": 19,
+  "scene_dominant_mood": "epic",
+  "scene_music_fraction": 0.079,
+  "scene_speech_fraction": 0.528,
+  "scene_n_segments": 83,
+  "scene_n_boundaries": 84,
+  "scene_compute_ms": 3528.2
+}
