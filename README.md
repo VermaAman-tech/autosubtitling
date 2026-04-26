@@ -68,59 +68,7 @@ This project addresses **automatic subtitle generation for movie trailers and fu
 
 ## 2. System Pipeline
 
-```
-INPUT: Movie / Trailer (MP4 / WAV)
-       │
-       ▼
-┌─────────────────────────────────────────────────────────┐
-│  Stage 1: Audio Extraction                              │
-│  ffmpeg → mono 16 kHz PCM WAV                           │
-│  (via imageio-ffmpeg bundled binary, no PATH needed)    │
-└───────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│  Stage 2: Voice Activity Detection (VAD)                │
-│  ① Energy-only   — log-energy threshold (baseline)     │
-│  ② MFCC+ZCR      — MFCC C0 × zero-crossing rate        │
-│  ③ Spectral VAD  — 0.45·C0 + 0.25·centroid             │
-│                   − 0.20·flatness + 0.10·(1−ZCR)        │
-│  Output: list of (start_sec, end_sec) speech segments   │
-└───────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│  Stage 3: Adaptive Enhancement Routing                  │
-│  IF estimated_SNR < 18 dB OR flatness > 0.18            │
-│  OR ZCR > 0.12 → apply enhancement                      │
-│  ELSE → pass raw audio to ASR                           │
-│  Options: Wiener filter / Spectral Subtraction (α=1.5)  │
-└───────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│  Stage 4: ASR — faster-whisper + Silero VAD             │
-│  Models: tiny.en (39M) / base.en (74M) / medium.en      │
-│  Silero VAD: thresh=0.35, min_silence=400ms             │
-│  Hallucination suppression: log_prob_threshold = −1.2   │
-│  Word-level timestamps · RTF 0.035–0.23 (all < 1)       │
-└───────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│  Stage 5: Scene Understanding                           │
-│  Foote novelty score → scene boundaries                 │
-│  Per-segment mood: tense/epic/sad/calm/dialogue/silence  │
-│  Temporal timeline (0.5s resolution)                    │
-└───────────────────────────┬─────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│  Stage 6: Subtitle Post-Processing                      │
-│  ≤12 words/cue · max 84 chars · CPS ≤ 20 enforcement   │
-│  Outputs: .srt · annotated SRT · JSON · 5-panel PNG     │
-└─────────────────────────────────────────────────────────┘
-```
+![System Pipeline](pipeline_diagram.png)
 
 ---
 
