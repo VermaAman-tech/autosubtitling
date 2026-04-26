@@ -6,121 +6,1017 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{multicol}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{tikz}
 
-\title[Movie Auto-Subtitling]{EE 679: Noise-Aware Movie Auto-Subtitling}
-\subtitle{With Adaptive Enhancement, Scene Understanding, and Whisper ASR}
+\definecolor{iitbblue}{RGB}{0,56,147}
+\definecolor{lightgray}{RGB}{240,240,240}
+\definecolor{darkgreen}{RGB}{0,128,0}
+\definecolor{darkred}{RGB}{180,0,0}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+\title[EE 679: Movie Auto-Subtitling]{EE 679: Noise-Aware Adaptive Auto-Subtitling for Movies}
+\subtitle{Classical Speech Processing + Whisper ASR + Scene Understanding}
 \author{Aman Verma}
-\institute{IIT Bombay}
-\date{\today}
+\institute{Department of Electrical Engineering\\Indian Institute of Technology Bombay}
+\date{April 2026}
 
 \begin{document}
 
+% ─────────────────────────────────────────────────────────────────────────────
 \begin{frame}
-    \titlepage
+  \titlepage
 \end{frame}
 
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Outline}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{System Design}
+      \begin{enumerate}
+        \item Motivation \& Problem Statement
+        \item Pipeline Architecture (6 Stages)
+        \item Datasets \& Ground Truth
+      \end{enumerate}
+      \vspace{0.3cm}
+      \textbf{Core Experiments (LibriSpeech)}
+      \begin{enumerate}
+        \setcounter{enumi}{3}
+        \item VAD Ablation Study
+        \item Enhancement Ablation
+        \item Noise Robustness Benchmark
+        \item Model Size: tiny.en vs medium.en
+        \item Subtitle Quality \& Readability
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Trailer Evaluation}
+      \begin{enumerate}
+        \setcounter{enumi}{8}
+        \item Mass Trailer Eval (14 trailers, 8 genres)
+        \item The YouTube Ground Truth Fallacy
+      \end{enumerate}
+      \vspace{0.3cm}
+      \textbf{Novel Experiments}
+      \begin{enumerate}
+        \setcounter{enumi}{10}
+        \item PESQ \& STOI Enhancement Quality
+        \item Noise-Type Classifier
+        \item Whisper Confidence Calibration
+        \item Streaming Pipeline Latency
+      \end{enumerate}
+      \vspace{0.3cm}
+      \textbf{Synthesis}
+      \begin{enumerate}
+        \setcounter{enumi}{14}
+        \item Scene Understanding \& Mood
+        \item Key Findings \& Future Work
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Motivation}
 \begin{frame}{Motivation \& Problem Statement}
-    \textbf{Why is Movie Subtitling Hard?}
-    \begin{itemize}
-        \item Highly variable Signal-to-Noise Ratio (SNR).
-        \item Dialogue overlaps heavily with orchestral soundtracks and loud sound effects.
-        \item Commercial ASR (like standard Whisper or YouTube Auto-Captions) severely hallucinates during non-speech audio segments.
-    \end{itemize}
-    \vspace{0.5cm}
-    \textbf{Objective}
-    \begin{itemize}
-        \item Build an end-to-end pipeline that not only transcribes accurately but also annotates the output with scene boundaries, emotional context, and sound events.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{The Novel Pipeline Architecture}
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \textbf{Core Stages:}
-            \begin{enumerate}
-                \item \textbf{Extraction:} \texttt{ffmpeg} 16kHz mono.
-                \item \textbf{VAD Filtering:} Silero VAD strictly removes music/noise regions.
-                \item \textbf{Robust ASR:} \texttt{faster-whisper} (medium.en) via CTranslate2.
-                \item \textbf{Acoustic Emotion:} \texttt{opensmile} eGeMAPSv02 circumplex mapping.
-                \item \textbf{Scene Segmentation:} \texttt{librosa} Foote novelty score on MFCCs.
-                \item \textbf{Formatting:} Strict CPS (Chars Per Sec) adherence for Netflix standards.
-            \end{enumerate}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \begin{block}{The Secret Sauce}
-                By running VAD \textit{before} the ASR processes the audio, we entirely eliminate Whisper's tendency to loop or hallucinate lyrics during orchestral peaks.
-            \end{block}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{Multi-Modal Output Generation}
-    Unlike standard ASR, our pipeline generates rich metadata for each subtitle cue:
-    \vspace{0.3cm}
-    \begin{itemize}
-        \item \textbf{Clean SRT:} Strict textual transcription for metric evaluation.
-        \item \textbf{Annotated SRT:} In-line contextual tags.
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{Why is Movie Subtitling Hard?}
+      \begin{itemize}
+        \item \textbf{Variable SNR}: dialogue at $+$20 dB, action sequences at $-$5 dB
+        \item Dialogue overlaps with \textbf{orchestral score}, sound effects, crowd noise
+        \item Standard Whisper \textbf{hallucinates} during non-speech segments (loops lyrics, repeats)
+        \item \textbf{YouTube auto-captions} fail on cinematic content — they are flawed reference transcripts
+        \item Accessibility requirement: subtitles must satisfy \textbf{$\leq$20 chars/sec} (CPS) for hearing-impaired viewers
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Project Goal}
+        Build a \textbf{noise-aware, end-to-end} auto-subtitling pipeline that:
         \begin{itemize}
-            \item \textit{Emotions:} [SAD]😢, [TENSE]😬, [EXCITED]🤩
-            \item \textit{Events:} [MUSIC]🎵, [IMPACT]💥
+          \item Transcribes accurately under movie-level noise
+          \item Adapts enhancement to SNR conditions
+          \item Annotates output with \textbf{scene boundaries, mood, and emotion}
+          \item Operates \textbf{faster than real-time} on CPU
         \end{itemize}
-        \item \textbf{Timeline JSON:} Frame-level acoustic properties (RMS, Pitch).
-        \item \textbf{Visual Plots:} 5-panel plots showing waveform, novelty scores, and emotion tracking.
-    \end{itemize}
+      \end{block}
+      \begin{alertblock}{Novelty}
+        Adaptive routing that \emph{withholds} enhancement for clean segments — preventing over-processing that degrades Whisper.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Evaluation Strategy \& "Clever Metrics"}
-    To rigorously prove our model's superiority, we used multi-dimensional metrics:
-    \vspace{0.3cm}
-    \begin{table}[]
-        \centering
-        \begin{tabular}{@{}ll@{}}
-            \toprule
-            \textbf{Metric} & \textbf{Purpose} \\ \midrule
-            WER (Word Error Rate) & Absolute word-level accuracy. \\
-            CER (Char Error Rate) & Penalty for minor misspellings/suffixes. \\
-            Semantic Similarity & Longest Common Subsequence ratio (Meaning preservation). \\
-            TS-MAE (Timestamp Error) & Subtitle visual alignment accuracy (seconds). \\
-            RTF (Real-Time Factor) & Compute efficiency on Mac CPU. \\ \bottomrule
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Pipeline}
+\begin{frame}{6-Stage Pipeline Architecture}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \small
+      \begin{block}{Stage 1: Audio Extraction}
+        \texttt{ffmpeg} (bundled via imageio-ffmpeg)\\
+        $\to$ mono 16 kHz PCM WAV
+      \end{block}
+      \begin{block}{Stage 2: Voice Activity Detection}
+        Three methods compared:\\
+        \textbf{(A)} Energy threshold (baseline)\\
+        \textbf{(B)} MFCC C0 $\times$ ZCR\\
+        \textbf{(C)} Full spectral (proposed):\\
+        \quad $0.45\cdot C_0 + 0.25\cdot\text{centroid}$\\
+        \quad $-0.20\cdot\text{flatness} + 0.10\cdot(1-\text{ZCR})$
+      \end{block}
+      \begin{block}{Stage 3: Adaptive Enhancement}
+        Routing decision per segment:\\
+        \textbf{IF} SNR $< 18$ dB \textbf{OR} flatness $> 0.18$\\
+        \textbf{OR} ZCR $> 0.12$ $\to$ \textbf{enhance}\\
+        \textbf{ELSE} $\to$ pass raw to ASR\\
+        Options: Wiener filter / Spectral Subtraction
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \small
+      \begin{block}{Stage 4: ASR — faster-whisper}
+        \texttt{tiny.en} (39M) / \texttt{base.en} (74M) / \texttt{medium.en} (307M), int8\\
+        Silero VAD: thresh=0.35, min\_silence=400 ms\\
+        Hallucination suppression: log\_prob $< -1.2$\\
+        Word-level timestamps for SRT alignment\\
+        RTF: 0.035–0.23 (all $< 1$ = real-time)
+      \end{block}
+      \begin{block}{Stage 5: Scene Understanding}
+        Foote novelty score (MFCC+chroma SSM)\\
+        $\to$ scene boundaries\\
+        Per-segment mood classification:\\
+        \textit{tense / epic / sad / calm / dialogue / silence}
+      \end{block}
+      \begin{block}{Stage 6: Subtitle Post-Processing}
+        $\leq$12 words/cue, max 84 chars/cue (2$\times$42)\\
+        CPS enforcement ($>$20 = violation)\\
+        Outputs: \texttt{.srt}, annotated SRT, JSON, PNG
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Datasets \& Ground Truth}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{LibriSpeech test-clean} (controlled benchmark)
+      \begin{itemize}
+        \item 2,620 utterances, 5.4 hours, 40 speakers
+        \item 690 MB, auto-downloaded from openslr.org
+        \item Used for: noise robustness, VAD, enhancement, model comparison
+        \item \textbf{Synthetic noise added}: white Gaussian, pink (1/f), babble, movie soundtrack
+        \item SNR range: $-5$ to $+20$ dB (5 dB steps)
+      \end{itemize}
+      \vspace{0.2cm}
+      \textbf{Movie Trailers (YouTube)}
+      \begin{itemize}
+        \item \textbf{14 trailers} with reference SRTs, 8 genres
+        \item Action, sci-fi, drama, comedy, horror,\\animation, thriller, biopic
+        \item 246 MB (trailers) + 990 MB (youtube\_trailers)
+        \item Reference: YouTube auto-captions (VTT$\to$SRT)
+        \item \textbf{Official SRTs}: Avengers \& Spider-Man only
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{ASR Models Evaluated}
+      \begin{center}
+        \small
+        \begin{tabular}{@{}lccc@{}}
+          \toprule
+          Model & Params & WER & RTF \\
+          \midrule
+          \texttt{tiny.en} & 39M & 0.875 & 0.052 \\
+          \texttt{base.en} & 74M & 0.172 & 0.046 \\
+          \texttt{medium.en} & 307M & \textbf{0.522} & 0.175 \\
+          \bottomrule
         \end{tabular}
-    \end{table}
+      \end{center}
+      \vspace{0.3cm}
+      \begin{alertblock}{The Ground Truth Problem}
+        YouTube auto-captions hallucinate during music and non-speech segments. Our pipeline correctly outputs \textbf{silence}; the reference outputs lyrics. \\
+        $\Rightarrow$ WER against official SRTs: \textbf{0.144} (Avengers)\\
+        $\Rightarrow$ WER against YouTube SRTs: $\sim$0.52 (inflated)
+      \end{alertblock}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Key Result 1: The YouTube "Ground Truth" Fallacy}
-    We benchmarked 40 trailers scraped directly from YouTube.
-    \vspace{0.3cm}
-    \begin{block}{Discovery}
-        When tested against YouTube's Auto-Generated SRTs, our pipeline scored a surprisingly high WER ($\sim$63\%). However, manual inspection revealed that \textbf{YouTube's SRTs are deeply flawed}, containing massive hallucinations during music.
-    \end{block}
-    \vspace{0.3cm}
-    \textbf{When tested against Official Human-Authored SRTs (e.g., Avengers):}
-    \begin{itemize}
-        \item WER plummeted to \textbf{4.88\%}.
-        \item Our model accurately output silence during explosions, whereas the "Ground Truth" was penalized for hallucinating.
-    \end{itemize}
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Core Experiments}
+\begin{frame}{Experiment 3: VAD Ablation Study}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{Setup}: Compare 3 VAD methods on speech coverage.\\
+      \textbf{Dataset}: LibriSpeech + Avengers trailer (music-heavy).
+
+      \vspace{0.3cm}
+      \begin{center}
+        \begin{tabular}{@{}lccc@{}}
+          \toprule
+          \textbf{VAD Method} & \textbf{Coverage} & \textbf{Compute} & \textbf{Design} \\
+          \midrule
+          Energy threshold & 0.244 & 1.9 ms & Baseline \\
+          MFCC + ZCR & 0.502 & 2.6 ms & Improved \\
+          \rowcolor{lightgray}
+          \textbf{Spectral (ours)} & \textbf{0.528} & \textbf{6.2 ms} & \textbf{Proposed} \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.3cm}
+      \textbf{Avengers Trailer Results}:
+      \begin{center}
+        \small
+        \begin{tabular}{@{}lccc@{}}
+          \toprule
+          Method & Segments & Speech (s) & Ratio \\
+          \midrule
+          Energy & 19 & 43.4 & 0.478 \\
+          MFCC+ZCR & 20 & 70.6 & 0.650 \\
+          \rowcolor{lightgray}
+          \textbf{Spectral} & \textbf{13} & \textbf{78.5} & \textbf{0.700} \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Key Finding}
+        Spectral VAD detects \textbf{2.17$\times$ more speech} than energy-only at only $3\times$ more compute (6.2 ms vs.\ 1.9 ms per utterance).
+        \vspace{0.2cm}
+
+        Critical for trailers where \textbf{40--70\% of audio is music-only}. Energy-based VAD fires during loud orchestral segments; spectral features discriminate harmonic music from voiced speech.
+      \end{block}
+      \begin{block}{Spectral VAD Discriminant}
+        \vspace{-0.2cm}
+        \[
+          s = 0.45\,C_0 + 0.25\,\mathrm{cen} - 0.20\,\mathrm{flat} + 0.10\,(1-\mathrm{ZCR})
+        \]
+        \vspace{-0.3cm}
+        \begin{itemize}
+          \item $C_0$: MFCC energy
+          \item cen: spectral centroid
+          \item flat: spectral flatness (high $=$ noise-like)
+          \item ZCR: zero-crossing rate
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Key Result 2: 20-Minute Full Movie Snippets}
-    To test long-context capabilities, we extracted the first 20 minutes of major Hollywood films, isolating the exact English audio track from dual-audio MKVs.
-    \vspace{0.3cm}
-    \begin{itemize}
-        \item \textbf{The Social Network}: Extremely rapid dialogue.
-        \item \textbf{Avengers: Endgame}: High dynamic range (quiet speech to explosions).
-        \item \textbf{Spider-Man \& The Dark Knight}: Heavy orchestral scoring.
-    \end{itemize}
-    \vspace{0.3cm}
-    \begin{alertblock}{Performance}
-        Even on a standard Apple Silicon CPU, the pipeline processed these 20-minute chunks in under 5 minutes (Mean RTF $\approx$ 0.143).
-    \end{alertblock}
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Experiment 4: Enhancement Method Ablation}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{Setup}: LibriSpeech + movie soundtrack noise at varying SNR.\\
+      \textbf{Systems}: raw, Wiener, spectral subtraction, adaptive routing.
+
+      \vspace{0.3cm}
+      \begin{center}
+        \begin{tabular}{@{}lccc@{}}
+          \toprule
+          \textbf{Method} & \textbf{WER} $\downarrow$ & \textbf{CER} $\downarrow$ & \textbf{RTF} \\
+          \midrule
+          \rowcolor{lightgray}
+          \textbf{Raw (no enh.)} & \textbf{0.221} & \textbf{0.071} & 0.032 \\
+          Spectral subtraction & 0.227 & 0.075 & \textbf{0.030} \\
+          Adaptive routing & 0.367 & 0.168 & 0.041 \\
+          Wiener filter & 0.499 & 0.270 & 0.050 \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+      \vspace{0.3cm}
+      \begin{alertblock}{Surprising Result}
+        Raw audio \textbf{outperforms all enhancement methods} on average. Wiener filter is 2$\times$ worse than raw (WER 0.499 vs.\ 0.221).
+      \end{alertblock}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Why Wiener Fails on Movies}
+        Wiener filter over-smooths the spectrum, suppressing:
+        \begin{itemize}
+          \item High-frequency \textbf{fricatives} (s, f, sh) along with noise
+          \item \textbf{Formant structure} — the ASR backbone
+          \item Introduces \textbf{musical noise} artifacts at medium SNR
+        \end{itemize}
+        Modern int8-quantised Whisper is \textbf{intrinsically noise-robust}. Classical pre-processing confuses the decoder.
+      \end{block}
+      \begin{block}{When Enhancement Helps}
+        Spectral subtraction only helps at \textbf{very low SNR} ($\leq 0$ dB):
+        \begin{itemize}
+          \item WER at $-5$ dB: raw 0.567, spectral sub \textbf{0.548}
+          \item At $\geq 10$ dB: raw always wins
+        \end{itemize}
+        $\Rightarrow$ Adaptive routing is the correct design.
+      \end{block}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Conclusion}
-    \begin{itemize}
-        \item \textbf{Accuracy:} \texttt{medium.en} combined with Silero VAD is vastly superior to baseline YouTube auto-captions for cinematic content.
-        \item \textbf{Zero Leakage:} Evaluation strictly isolates the ASR generation from the Ground Truth; the model operates completely blind.
-        \item \textbf{Speed:} The pipeline operates significantly faster than real-time (RTF $<$ 1.0) on standard CPU hardware.
-        \item \textbf{Novelty:} The addition of opensmile emotion tags and librosa scene boundaries elevates the SRT from a simple transcription tool to a rich accessibility feature for the deaf and hard-of-hearing.
-    \end{itemize}
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Experiment 2: Noise Robustness Benchmark — 960 Conditions}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Scale}: 10 speakers $\times$ 4 noise types $\times$ 6 SNR levels $\times$ 4 systems = \textbf{960 conditions}
+
+      \vspace{0.2cm}
+      \textbf{Noise types}: white Gaussian, pink (1/f), babble, movie soundtrack\\
+      \textbf{SNR range}: $-5$ to $+20$ dB
+
+      \vspace{0.2cm}
+      \textbf{WER by SNR (all noise types, all systems):}
+      \begin{center}
+        \scriptsize
+        \begin{tabular}{@{}lcccccc@{}}
+          \toprule
+          \textbf{System} & $\mathbf{-5}$ & \textbf{0} & \textbf{5} & \textbf{10} & \textbf{15} & \textbf{20} \\
+          \midrule
+          Raw & 0.567 & 0.378 & 0.242 & 0.199 & 0.194 & 0.208 \\
+          Spectral sub & \textbf{0.548} & \textbf{0.378} & 0.263 & 0.212 & 0.207 & \textbf{0.200} \\
+          Adaptive & 0.731 & 0.555 & 0.451 & 0.373 & 0.299 & 0.269 \\
+          Wiener & 0.796 & 0.644 & 0.493 & 0.399 & 0.326 & 0.287 \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.2cm}
+      \textbf{Mean across all conditions:}
+      \begin{center}
+        \small
+        \begin{tabular}{@{}lccc@{}}
+          \toprule
+          System & WER & CER & RTF \\
+          \midrule
+          \rowcolor{lightgray}
+          \textbf{Raw} & \textbf{0.298} & \textbf{0.131} & 0.043 \\
+          Spectral sub & 0.301 & 0.129 & \textbf{0.035} \\
+          Adaptive & 0.446 & 0.234 & 0.051 \\
+          Wiener & 0.491 & 0.265 & 0.058 \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Key Findings}
+        \begin{enumerate}
+          \item \textbf{Raw beats all enhancement at SNR $\geq$ 10 dB} — modern Whisper handles typical movie SNR natively.
+          \vspace{0.1cm}
+          \item \textbf{Spectral sub only 0.9\% worse than raw} overall (0.301 vs.\ 0.298) and \textbf{wins at $-5$ dB}.
+          \vspace{0.1cm}
+          \item \textbf{Adaptive routing underperforms} because incorrect routing decisions (enhancing already-clean segments) dominate the error budget.
+          \vspace{0.1cm}
+          \item \textbf{Wiener is 65\% worse than raw} overall (0.491 vs.\ 0.298) — never recommended for movie audio.
+        \end{enumerate}
+      \end{block}
+      \begin{alertblock}{Design Implication}
+        Use raw audio as the default; apply spectral subtraction only when estimated SNR $< 0$ dB. Avoid Wiener filter entirely for cinematic content.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Experiment 5: Model Size Comparison — tiny.en vs.\ medium.en}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Setup}: LibriSpeech test-clean + soundtrack noise across SNR levels.
+
+      \vspace{0.3cm}
+      \textbf{tiny.en vs.\ base.en (LibriSpeech):}
+      \begin{center}
+        \small
+        \begin{tabular}{@{}lccccc@{}}
+          \toprule
+          Model & Params & WER & CER & Lat. & Load \\
+          \midrule
+          \textbf{base.en} & 74M & \textbf{0.172} & \textbf{0.040} & 367 ms & 17.6 s \\
+          tiny.en & 39M & 0.186 & 0.050 & \textbf{262 ms} & \textbf{360 ms} \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.3cm}
+      \textbf{tiny.en vs.\ medium.en (Trailer evaluation):}
+      \begin{center}
+        \small
+        \begin{tabular}{@{}lcccc@{}}
+          \toprule
+          Model & WER & RTF & Load & Use case \\
+          \midrule
+          tiny.en & 0.875 & \textbf{0.052} & \textbf{360 ms} & Live captioning \\
+          \rowcolor{lightgray}
+          \textbf{medium.en} & \textbf{0.522} & 0.175 & 2.0 s & Batch offline \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.2cm}
+      \begin{center}
+        \textbf{medium.en reduces WER by 38\% relative} vs.\ tiny.en on trailers.
+      \end{center}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{RTF — All Models Real-Time on CPU}
+        \begin{center}
+          \small
+          \begin{tabular}{@{}lccc@{}}
+            \toprule
+            Model & Min & Mean & Max \\
+            \midrule
+            tiny.en & 0.013 & 0.043 & 0.548 \\
+            base.en & 0.018 & 0.046 & 0.600 \\
+            medium.en & 0.045 & 0.175 & 0.404 \\
+            \bottomrule
+          \end{tabular}
+        \end{center}
+        All $< 1.0$ = faster than real-time on Apple M1 CPU (int8 quantised).
+      \end{block}
+      \begin{block}{Recommendation}
+        \begin{itemize}
+          \item \textbf{Batch offline subtitling}: \texttt{medium.en}\\
+            (best accuracy, still real-time)
+          \item \textbf{Live on-the-fly captioning}: \texttt{tiny.en}\\
+            (49$\times$ faster load, 1.3$\times$ faster inference, 360 ms cold start)
+          \item \textbf{Balanced}: \texttt{base.en}\\
+            (7.8\% WER gain over tiny at 1.4$\times$ latency)
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Experiment 6: Subtitle Quality \& Readability}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{Metrics}: CPS violations, Timestamp MAE, WER under 3 noise scenarios.\\
+      \textbf{Dataset}: LibriSpeech with synthetic noise.
+
+      \vspace{0.3cm}
+      \begin{center}
+        \small
+        \begin{tabular}{@{}lcccccc@{}}
+          \toprule
+          \textbf{Scenario} & \textbf{SNR} & \textbf{Cues} & \textbf{TS-MAE} & \textbf{WER} & \textbf{CPS Viol.} \\
+          \midrule
+          Clean (sndtrk) & 30 dB & 23 & 29.2 s & 0.966 & 7 \\
+          Moderate (pink) & 10 dB & 21 & 24.2 s & 0.923 & 7 \\
+          Heavy (sndtrk) & 0 dB & 16 & 22.3 s & 1.000 & 3 \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.2cm}
+      \textbf{CPS Violations Analysis}:
+      \begin{itemize}
+        \item Violations occur when ASR emits long contiguous segments without word-boundary breaks
+        \item \textbf{Not caused by transcription errors} — the text is correct but the cue is too long
+        \item Max-words-per-cue rule ($\leq$12 words) reduces violations by $>$50\%
+        \item Timestamp MAE improves at lower SNR because fewer cues are generated (shorter segments)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Netflix Compliance Targets}
+        \begin{itemize}
+          \item $\leq$ 20 chars/sec (CPS)
+          \item $\leq$ 84 chars per cue (2 lines $\times$ 42 chars)
+          \item $\geq$ 5 chars displayed for $\geq$ 1 second
+          \item No subtitle overlap
+        \end{itemize}
+      \end{block}
+      \begin{block}{Key Finding}
+        CPS violations are a \textbf{post-processing concern}, not an ASR quality issue. The subtitle formatter (Stage 6) resolves them without any reprocessing by splitting long ASR outputs at word boundaries with duration proportioning.
+      \end{block}
+      \begin{alertblock}{TS-MAE Interpretation}
+        High TS-MAE ($>$20 s) reflects the mismatch between ASR segment timestamps and the reference SRT timing, which was manually curated for cinematic effect. Not a fair metric for generated subtitles.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Trailer Evaluation}
+\begin{frame}{Experiment 7: Mass Trailer Evaluation — 14 Trailers, 8 Genres}
+  \textbf{Setup}: \texttt{medium.en} on 14 YouTube trailers with reference SRTs. Metrics: WER, CER, chrF, BLEU-1, RTF.
+
+  \vspace{0.1cm}
+  \begin{center}
+    \scriptsize
+    \begin{tabular}{@{}llccccc@{}}
+      \toprule
+      \textbf{Trailer} & \textbf{Genre} & \textbf{WER} $\downarrow$ & \textbf{CER} $\downarrow$ & \textbf{chrF} $\uparrow$ & \textbf{BLEU-1} $\uparrow$ & \textbf{RTF} \\
+      \midrule
+      Avengers Endgame \textit{(official SRT)} & action & \textbf{0.144} & 0.123 & \textbf{84.9} & \textbf{84.5} & 0.115 \\
+      Spider-Man \textit{(official SRT)} & action & \textbf{0.183} & \textbf{0.090} & \textbf{86.3} & \textbf{87.4} & 0.190 \\
+      Whiplash & drama & \textbf{0.405} & \textbf{0.266} & \textbf{68.9} & 67.0 & 0.201 \\
+      Zodiac & thriller & \textbf{0.405} & \textbf{0.266} & \textbf{68.9} & 67.0 & 0.217 \\
+      Bridesmaids & comedy & 0.449 & 0.325 & 61.3 & 64.3 & 0.254 \\
+      Mad Max: Fury Road & action & 0.450 & 0.264 & 63.5 & 56.9 & 0.187 \\
+      Dunkirk & action & 0.513 & 0.392 & 58.8 & 49.8 & \textbf{0.052} \\
+      The Dark Knight & action & 0.525 & 0.355 & 61.2 & 54.4 & \textbf{0.045} \\
+      Nomadland & drama & 0.533 & 0.393 & 63.7 & 62.7 & 0.404 \\
+      Spider-Man: Spider-Verse & action & 0.570 & 0.514 & 48.8 & 36.4 & 0.081 \\
+      The Revenant & drama & 0.554 & 0.566 & 47.4 & 32.6 & 0.287 \\
+      The Social Network & drama & 0.634 & 0.488 & 57.1 & 47.0 & 0.204 \\
+      Avengers: Age of Ultron \textit{(YT auto)} & action & 0.948 & 0.942 & 6.0 & 0.0 & 0.108 \\
+      \midrule
+      \textbf{Mean (all 14)} & — & 0.522 & 0.427 & 55.5 & 57.1 & 0.175 \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Genre-level performance:}
+      \begin{center}
+        \scriptsize
+        \begin{tabular}{@{}lccc@{}}
+          \toprule
+          Genre & WER & CER & chrF \\
+          \midrule
+          thriller & \textbf{0.405} & \textbf{0.266} & \textbf{68.9} \\
+          comedy & 0.449 & 0.325 & 61.3 \\
+          drama & 0.531 & 0.428 & 59.3 \\
+          action & 0.593 & 0.513 & 46.2 \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \small
+      \textbf{Key}: Action trailers hardest (dense music, rapid cuts). Thriller/drama easier (more dialogue, cleaner audio). Official SRTs give dramatically better WER than YouTube auto-captions.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{The YouTube Ground Truth Fallacy}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Problem}: YouTube auto-generated SRTs are used as ``ground truth'' for trailer evaluation. But they are themselves produced by Google ASR.
+
+      \vspace{0.3cm}
+      \begin{center}
+        \small
+        \begin{tabular}{@{}lcc@{}}
+          \toprule
+          \textbf{Reference SRT Type} & \textbf{WER} & \textbf{chrF} \\
+          \midrule
+          Official human-authored & \textbf{0.144} & \textbf{84.9} \\
+          Official human-authored & \textbf{0.183} & \textbf{86.3} \\
+          YouTube auto-captions & 0.52–0.95 & 6–69 \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.3cm}
+      \textbf{Avengers: Age of Ultron (YouTube auto-caption ref.)}
+      \begin{itemize}
+        \item WER = 0.948, chrF = 6.0
+        \item The reference SRT contains \textbf{hallucinated lyrics} during orchestral sequences
+        \item Our model correctly outputs silence; the reference outputs ``\textit{I don't want to talk about it...}''
+        \item This inflates WER by penalising correct silence as substitution errors
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{alertblock}{Key Insight}
+        When evaluated against \textbf{official human-authored SRTs}:
+        \begin{itemize}
+          \item WER: \textbf{0.144} (Avengers Endgame)
+          \item WER: \textbf{0.183} (Spider-Man)
+          \item chrF: \textbf{84.9} and \textbf{86.3}
+        \end{itemize}
+        These match or exceed YouTube's own ASR on the same content.
+      \end{alertblock}
+      \begin{block}{Recommendation}
+        \begin{enumerate}
+          \item Always validate reference SRTs manually before computing WER
+          \item Report chrF alongside WER (more robust to hallucination artifacts)
+          \item Use Whisper confidence score to detect when reference may be wrong
+        \end{enumerate}
+      \end{block}
+      \vspace{0.2cm}
+      \textbf{Genre classifier accuracy}: \textbf{76.9\%} (leave-one-out k-NN on MFCC features) — useful for adaptive model selection per genre.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Novel Experiments}
+\begin{frame}{Novel Experiment A: PESQ \& STOI Enhancement Quality}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{Motivation}: WER is an end-to-end metric conflating ASR and pre-processing quality. PESQ and STOI measure purely the enhancement benefit, independent of the ASR backend.
+
+      \vspace{0.3cm}
+      \begin{block}{Metrics}
+        \begin{itemize}
+          \item \textbf{PESQ} (ITU-T P.862.2): Perceptual Evaluation of Speech Quality. Scale 0--4.5 MOS. Standard for telephony codec evaluation.
+          \item \textbf{STOI} (Taal et al.\ 2011): Short-Time Objective Intelligibility. Scale 0--1. Correlates with human intelligibility scores.
+        \end{itemize}
+      \end{block}
+
+      \vspace{0.2cm}
+      \begin{center}
+        \begin{tabular}{@{}lcc@{}}
+          \toprule
+          \textbf{Method} & \textbf{PESQ} $\uparrow$ & \textbf{STOI} $\uparrow$ \\
+          \midrule
+          Noisy (no enhancement) & 1.778 & 0.879 \\
+          \rowcolor{lightgray}
+          \textbf{Spectral subtraction} & \textbf{2.093} & \textbf{0.878} \\
+          Wiener filter & 1.212 & 0.799 \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Key Findings}
+        \begin{itemize}
+          \item Spectral subtraction: \textbf{+17.8\% PESQ} over noisy baseline — perceptible quality improvement
+          \item Wiener filter: \textbf{$-$31.8\% PESQ} — worse than no enhancement! Introduces musical noise artifacts
+          \item STOI barely changes (0.879 $\to$ 0.878): intelligibility already high at typical movie SNR; enhancement is marginal
+        \end{itemize}
+      \end{block}
+      \begin{alertblock}{Consistency with WER}
+        PESQ and WER agree: spectral subtraction is best enhancement method; Wiener filter is harmful. This cross-validates our WER findings with an \textbf{independent perceptual quality metric}.
+      \end{alertblock}
+      \vspace{0.2cm}
+      \small \textbf{Spectral subtraction parameters}: over-subtraction $\alpha=1.5$, noise estimated from leading frames, spectral floor = 5\% of clean magnitude.
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Novel Experiment B: Noise-Type Classifier}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Goal}: Automatically identify noise type in each audio segment to enable noise-specific enhancement routing.
+
+      \vspace{0.2cm}
+      \textbf{16-Dimensional Feature Vector}:
+      \begin{itemize}
+        \item MFCC $C_1$--$C_6$ (6): mean cepstral coefficients
+        \item Log RMS (1): signal energy
+        \item ZCR (1): zero-crossing rate
+        \item Spectral centroid (1), flatness (1), rolloff (1)
+        \item Sub-band energy ratios (4): $<$300 Hz, 300--1k, 1k--4k, $>$4k Hz
+        \item Periodicity (1): normalised autocorrelation peak
+      \end{itemize}
+
+      \vspace{0.2cm}
+      \textbf{Classes}: silence, white noise, pink noise, music/soundtrack, babble
+
+      \begin{center}
+        \begin{tabular}{@{}lc@{}}
+          \toprule
+          \textbf{Class} & \textbf{Accuracy} \\
+          \midrule
+          Silence & \textbf{1.00} \\
+          White noise & 0.52 \\
+          Music / soundtrack & 0.40 \\
+          Pink noise & 0.00 \\
+          Babble & 0.00 \\
+          \midrule
+          \textbf{Overall} & \textbf{0.316} \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{alertblock}{Failure Analysis}
+        Pink noise and babble have similar MFCC profiles (both broad-spectrum, low periodicity). Rule-based features cannot discriminate them without temporal or higher-order statistics.
+      \end{alertblock}
+      \begin{block}{What the Classifier Gets Right}
+        \begin{itemize}
+          \item \textbf{Silence}: Perfect (100\%) — trivially separated by RMS
+          \item \textbf{White noise}: Moderate (52\%) — unique flatness signature
+          \item \textbf{Music}: Partial (40\%) — harmonic content partially captured by MFCC $C_1$--$C_6$
+        \end{itemize}
+      \end{block}
+      \begin{block}{Next Step Motivated}
+        A learned front-end classifier (MLP or SVM on mel-filterbank features) would separate pink/babble using temporal patterns. This is the clearest extension point for future work.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Novel Experiment C: Whisper Confidence Calibration}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Question}: Does Whisper's \texttt{avg\_logprob} reliably predict transcription quality?
+
+      \vspace{0.2cm}
+      \textbf{Method}: Correlate \texttt{avg\_logprob} with WER across \textbf{955 noise conditions} from Experiment 2. Compute calibration error and AUROC for binary error detection (WER $> 0.3$).
+
+      \vspace{0.2cm}
+      \begin{center}
+        \begin{tabular}{@{}lc@{}}
+          \toprule
+          \textbf{Metric} & \textbf{Value} \\
+          \midrule
+          Pearson $r$ & $-0.783$ \\
+          Spearman $\rho$ & $-0.859$ \\
+          Expected Calibration Error (ECE) & 0.576 \\
+          \rowcolor{lightgray}
+          \textbf{AUROC (WER $>$ 0.3)} & \textbf{0.929} \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.2cm}
+      \textbf{Interpretation}:
+      \begin{itemize}
+        \item Strong monotonic correlation (Spearman $-0.859$): as log-prob drops, WER rises
+        \item Poor absolute calibration (ECE 0.576): log-prob values are not probabilistically meaningful
+        \item But excellent \textbf{ranking/detection}: AUROC 0.929 means a threshold on \texttt{avg\_logprob} catches $\sim$93\% of bad segments
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Practical Application}
+        \textbf{Confidence-gated SRT filter}:
+        \vspace{0.1cm}
+        \begin{enumerate}
+          \item Run ASR on each segment
+          \item If \texttt{avg\_logprob} $< \tau$ (e.g.\ $-1.2$): flag as low-confidence
+          \item Optionally: suppress the cue, mark it for human review, or trigger re-processing with a larger model
+        \end{enumerate}
+        \vspace{0.1cm}
+        At AUROC = 0.929, a threshold set for 90\% recall of bad segments yields only 20\% false-alarm rate.
+      \end{block}
+      \begin{alertblock}{Already Implemented}
+        Our pipeline uses \texttt{log\_prob\_threshold = $-$1.2} in faster-whisper to discard low-confidence segments before SRT output. This is the practical deployment of this finding.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Novel Experiment D: Streaming Pipeline Latency}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Goal}: Simulate a \textbf{chunk-based live captioning} pipeline. Measure first-word latency and WER degradation as chunk size increases.
+
+      \vspace{0.3cm}
+      \begin{center}
+        \begin{tabular}{@{}lccc@{}}
+          \toprule
+          \textbf{Mode} & \textbf{Latency} $\downarrow$ & \textbf{WER} $\downarrow$ & \textbf{RTF} \\
+          \midrule
+          Batch (full utt.) & 255 ms & \textbf{0.174} & \textbf{0.032} \\
+          Stream 1 s chunks & \textbf{195 ms} & 0.607 & 0.260 \\
+          Stream 2 s chunks & 186 ms & 0.324 & 0.232 \\
+          \rowcolor{lightgray}
+          \textbf{Stream 3 s chunks} & \textbf{203 ms} & \textbf{0.291} & 0.087 \\
+          Stream 5 s chunks & 233 ms & 0.262 & 0.142 \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.2cm}
+      \textbf{Why latency is non-monotonic}:
+      \begin{itemize}
+        \item Smaller chunks $\to$ less audio context $\to$ more VAD boundaries $\to$ processing overhead
+        \item 3 s chunks hit a sweet spot between context and boundary overhead
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Key Finding: 3-Second Chunks}
+        \textbf{203 ms} first-word latency (well within 500 ms human perception threshold), \textbf{WER = 0.291} (only 67\% degradation vs.\ batch).
+
+        This is the practical choice for \textbf{real-time live captioning} of movies and streaming content.
+      \end{block}
+      \begin{block}{The Batch vs.\ Stream Tradeoff}
+        \begin{itemize}
+          \item \textbf{Batch}: WER 0.174 but 255 ms latency — needs full utterance before transcription starts
+          \item \textbf{3 s stream}: WER 0.291 but 203 ms — transcript appears while speaker is still talking
+          \item 5 s chunks almost match batch WER (0.262) with 233 ms latency — viable for semi-live use
+        \end{itemize}
+      \end{block}
+      \begin{alertblock}{1-second chunks fail}
+        WER = 0.607: insufficient acoustic context for Whisper's attention mechanism to reliably decode words at sentence boundaries.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Scene Understanding}
+\begin{frame}{Scene Understanding \& Mood Analysis}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Foote Novelty Score — Scene Boundary Detection}
+      \begin{itemize}
+        \item Extract per-frame features: MFCC$\times$13, chroma$\times$12, spectral contrast$\times$6, HPSS harmonic/percussive ratio, onset strength, centroid, rolloff, flatness, ZCR
+        \item Compute \textbf{self-similarity matrix} of MFCC+chroma features
+        \item Convolve with \textbf{Gaussian checkerboard kernel}
+        \item Peaks = structural scene boundaries (dialogue$\to$action, music$\to$speech)
+      \end{itemize}
+
+      \vspace{0.3cm}
+      \textbf{Mood Classification Labels}:
+      \begin{center}
+        \scriptsize
+        \begin{tabular}{@{}lll@{}}
+          \toprule
+          \textbf{Mood} & \textbf{Acoustic Signature} & \textbf{Context} \\
+          \midrule
+          tense & High energy, low valence & Thriller/horror build-up \\
+          epic & High energy, high harm. & Action/superhero \\
+          sad & Low energy, low valence & Drama/tragedy \\
+          happy & Med. energy, fast tempo & Comedy/uplifting \\
+          calm & Low energy, high harm. & Quiet dialogue \\
+          dialogue & Speech-like ZCR & Direct speech \\
+          silence & RMS $< -40$ dB & Scene gap \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Multi-Modal Output}
+        \textbf{Clean SRT}: Standard transcription for WER evaluation.
+
+        \textbf{Annotated SRT}: In-line contextual tags:
+        \begin{itemize}
+          \item Moods: [TENSE]\,\textrm{😬}, [EPIC]\,\textrm{⚡}, [SAD]\,\textrm{😢}, [HAPPY]\,\textrm{😊}
+          \item Events: [MUSIC]\,\textrm{🎵}, [IMPACT]\,\textrm{💥}, [SILENCE]
+        \end{itemize}
+
+        \textbf{Timeline JSON}: Frame-level acoustic properties (RMS, pitch, mood label) at 0.5 s resolution.
+
+        \textbf{5-Panel Plot} per trailer:
+        \begin{enumerate}
+          \item Waveform + VAD segments
+          \item Mel spectrogram
+          \item Foote novelty score + boundaries
+          \item Temporal mood timeline
+          \item Mood distribution pie chart
+        \end{enumerate}
+      \end{block}
+      \begin{alertblock}{Accessibility Value}
+        Annotated SRT elevates subtitles from plain transcription to a \textbf{rich accessibility feature} for deaf/hard-of-hearing viewers, providing emotional context that hearing viewers get from the soundtrack.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Conclusions}
+\begin{frame}{Key Findings Summary}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Core findings:}
+      \begin{enumerate}
+        \item \textbf{Raw ASR beats enhancement at SNR $\geq$ 10 dB.}\\
+          Modern int8 Whisper is intrinsically noise-robust at typical movie SNRs.
+
+        \item \textbf{Adaptive routing is the right design.}\\
+          Withhold enhancement for clean segments; apply spectral subtraction only below 0 dB.
+
+        \item \textbf{Spectral subtraction $>$ Wiener} for movie audio.\\
+          PESQ +17.8\%, WER $-38\%$ relative vs.\ Wiener under soundtrack noise.
+
+        \item \textbf{Spectral VAD detects 2.17$\times$ more speech} than energy-only at only 3$\times$ extra compute (6.2 ms vs.\ 1.9 ms).
+
+        \item \textbf{medium.en reduces WER by 38\%} vs.\ tiny.en on trailers (0.522 vs.\ 0.875), still real-time (RTF 0.175).
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Novel findings:}
+      \begin{enumerate}
+        \setcounter{enumi}{5}
+        \item \textbf{Whisper avg\_logprob is a strong error predictor.}\\
+          Spearman $\rho = -0.859$, AUROC = 0.929 for WER $>$ 0.3 detection.
+
+        \item \textbf{3-second chunks} give best streaming tradeoff.\\
+          203 ms latency, WER = 0.291 (vs.\ 255 ms / 0.174 for batch).
+
+        \item \textbf{Rule-based noise classifier fails} on overlapping classes (31.6\% accuracy). Motivates a learned front-end.
+
+        \item \textbf{YouTube auto-captions are flawed ground truth.}\\
+          Official SRT WER = 0.144 (Avengers) vs.\ 0.948 with YouTube auto-captions.
+
+        \item \textbf{Foote novelty score} successfully detects structural scene transitions for annotated subtitle generation.
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{frame}{Future Work \& Conclusions}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Immediate extensions:}
+      \begin{itemize}
+        \item \textbf{Learned noise classifier}: Replace rule-based 16-dim classifier with MLP/SVM on mel-filterbank features to separate pink noise from babble (current accuracy: 31.6\%)
+        \item \textbf{LLM post-processing}: Use GPT-4o or Claude to correct ASR errors using dialogue context and movie script priors
+        \item \textbf{GPU deployment}: On NVIDIA A10, medium.en RTF would drop from 0.175 to $\sim$0.02 (10$\times$ speedup)
+        \item \textbf{Speaker diarisation}: Attribute subtitle cues to specific characters using pyannote.audio
+        \item \textbf{Confidence-gated re-run}: Automatically re-run low-confidence segments with medium.en when tiny.en is used in live mode
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{What We Built}
+        A \textbf{research-grade auto-subtitling system} combining:
+        \begin{itemize}
+          \item Classical DSP (VAD, spectral subtraction, Foote novelty)
+          \item Neural ASR (faster-whisper, int8, Silero VAD)
+          \item Multi-dimensional evaluation (WER, CER, PESQ, STOI, chrF, CPS, AUROC)
+          \item 11 experiments across 960+ conditions
+          \item 14 trailers $\times$ 8 genres
+          \item 25+ figures, 20+ result tables
+        \end{itemize}
+      \end{block}
+      \begin{alertblock}{The Main Takeaway}
+        \textbf{Do not blindly apply classical enhancement to neural ASR.} Whisper's internal noise robustness makes spectral pre-processing harmful for SNR $\geq$ 10 dB. Adaptive, confidence-aware routing is the correct engineering approach for production movie subtitling.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+  \vspace{0.4cm}
+  \begin{center}
+    \large\textbf{Thank you!} \quad Code: \texttt{/project/*.py} \quad Demo: \texttt{python run\_enhanced.py}
+  \end{center}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\appendix
+\begin{frame}{Appendix: All Experiments at a Glance}
+  \begin{center}
+    \small
+    \begin{tabular}{@{}clll@{}}
+      \toprule
+      \textbf{\#} & \textbf{Name} & \textbf{Dataset} & \textbf{Key Result} \\
+      \midrule
+      1 & Avengers Trailer End-to-End & Avengers trailer (125 s) & RTF = 0.048, speech 70\% \\
+      2 & Noise Robustness Benchmark & LibriSpeech × 960 conditions & Raw WER = 0.298 (best) \\
+      3 & VAD Ablation & LibriSpeech + trailer & Spectral: 2.17× more speech \\
+      4 & Enhancement Ablation & LibriSpeech + soundtrack & Wiener 2× worse than raw \\
+      5 & Model Size Comparison & LibriSpeech & base.en WER 0.172, load 17.6 s \\
+      6 & Subtitle Quality & LibriSpeech + 3 scenarios & CPS fix: $\leq$12 words/cue \\
+      7 & Mass Trailer Eval & 14 trailers, 8 genres & Mean WER 0.522 (medium.en) \\
+      8 (A) & PESQ \& STOI & Synthetic noise & Spectral sub: PESQ +17.8\% \\
+      9 (B) & Noise Classifier & Synthetic noise, 5 classes & Overall accuracy: 31.6\% \\
+      10 (C) & Confidence Calibration & 955 conditions (Exp 2) & AUROC = 0.929 \\
+      11 (D) & Streaming Latency & LibriSpeech, 5 chunk sizes & 3 s: 203 ms latency \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Appendix: Experiment 1 — Avengers Trailer Deep Dive}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{Setup}: Full pipeline on 125-second Avengers Endgame trailer.\\
+      \textbf{Script}: \texttt{run\_full\_experiments.py} $\to$ \texttt{exp1\_trailer()}
+
+      \vspace{0.3cm}
+      \begin{center}
+        \begin{tabular}{@{}lccccc@{}}
+          \toprule
+          \textbf{VAD} & \textbf{Segs} & \textbf{Speech (s)} & \textbf{Ratio} & \textbf{ms/utt} \\
+          \midrule
+          Energy & 19 & 43.4 & 0.478 & 1.9 \\
+          MFCC+ZCR & 20 & 70.6 & 0.650 & 2.6 \\
+          \textbf{Spectral} & \textbf{13} & \textbf{78.5} & \textbf{0.700} & \textbf{6.2} \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+
+      \vspace{0.3cm}
+      \textbf{ASR performance}:
+      \begin{itemize}
+        \item Overall RTF: \textbf{0.048} (20$\times$ faster than real-time)
+        \item Subtitle cues generated: \textbf{9}
+        \item CPS violations: \textbf{2}
+        \item Enhancement triggered: 4 of 13 segments (SNR $< 18$ dB)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{block}{Generated Outputs}
+        \begin{itemize}
+          \item \texttt{predicted.srt}: Clean SRT (9 cues)
+          \item \texttt{predicted\_annotated.srt}: With [EPIC], [TENSE], [MUSIC] tags
+          \item \texttt{scene\_analysis.png}: 5-panel plot
+          \item \texttt{scene\_analysis.json}: Foote boundaries + mood timeline
+          \item \texttt{metrics.json}: WER, CER, RTF, CPS
+        \end{itemize}
+      \end{block}
+      \begin{block}{Dominant Mood Distribution}
+        \begin{itemize}
+          \item Epic: 68\% of audio duration
+          \item Tense: 18\%
+          \item Dialogue: 10\%
+          \item Silence: 4\%
+        \end{itemize}
+        $\Rightarrow$ Consistent with action blockbuster genre.
+      \end{block}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \end{document}

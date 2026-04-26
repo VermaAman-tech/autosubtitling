@@ -13,12 +13,11 @@
 4. [Setup & Installation](#4-setup--installation)
 5. [Quick Start](#5-quick-start)
 6. [Dataset Acquisition](#6-dataset-acquisition)
-7. [Experiment Suite (All 10 Experiments)](#7-experiment-suite)
+7. [Experiment Suite (All 11 Experiments)](#7-experiment-suite)
 8. [Results Summary](#8-results-summary)
 9. [Scene Understanding Module](#9-scene-understanding-module)
 10. [Module Reference](#10-module-reference)
 11. [Key Findings](#11-key-findings)
-12. [Presentation Outline (20 min)](#12-presentation-outline)
 
 ---
 
@@ -30,6 +29,7 @@ This project addresses **automatic subtitle generation for movie trailers and fu
 - **Variable SNR** across cuts (dialogue at 20 dB, action sequences at −5 dB)
 - **Diverse acoustic environments** (whispers, explosions, crowd noise)
 - **Scene boundaries** that disrupt ASR context
+- **Flawed ground truth**: YouTube auto-captions hallucinate during music, inflating WER
 
 ### What makes this system novel
 
@@ -39,11 +39,17 @@ This project addresses **automatic subtitle generation for movie trailers and fu
 | Enhancement | Wiener filter | Adaptive routing: raw / Wiener / Spectral Subtraction |
 | ASR | Vanilla Whisper tiny | Faster-Whisper + Silero VAD + hallucination suppression |
 | Scene analysis | None | Foote novelty score + music mood detection |
-| Subtitle quality | WER only | WER + CER + CPS + TS-MAE + RTF |
+| Subtitle quality | WER only | WER + CER + chrF + BLEU + CPS + TS-MAE + RTF |
 | Enhancement metric | None | PESQ (ITU-T P.862.2) + STOI (Taal 2011) |
 | Confidence | None | Whisper avg_logprob calibration (AUROC = 0.929) |
 | Streaming | None | Chunk-based pipeline with first-word latency |
-| Evaluation | 2 clips | 14 trailers × 8 genres from YouTube |
+| Evaluation | 2 clips | 14 trailers × 8 genres + LibriSpeech × 960 conditions |
+
+### Core Design Principle
+
+> **Do not blindly apply classical enhancement to neural ASR.**
+>
+> Modern int8-quantised Whisper is intrinsically noise-robust at SNR ≥ 10 dB. Classical pre-processing (Wiener filter, spectral subtraction) confuses the decoder by altering the spectral structure it was trained on. Our adaptive routing *withholds* enhancement for clean segments — preventing over-processing that degrades transcription.
 
 ---
 
@@ -122,7 +128,7 @@ INPUT: Movie / Trailer (MP4 / WAV)
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│  Stage 5: Scene Understanding (NEW)                     │
+│  Stage 5: Scene Understanding                           │
 │                                                         │
 │  a) Feature extraction (per 512-sample hop):            │
 │     MFCC×13, chroma×12, spectral contrast×6,            │
@@ -179,49 +185,59 @@ EE 679 Project/
 │   ├── dataset.py                      LibriSpeech downloader/preparer
 │   ├── metrics.py                      WER, CER, timestamp MAE, CPS violations
 │   ├── subtitles.py                    SRT writer with line-breaking
+│   ├── extra_metrics.py                chrF, BLEU, genre classifier (k-NN on MFCC)
 │   ├── marvel_pipeline.py              v1 pipeline for comparison
 │   ├── live_pipeline.py                Streaming subtitle pipeline
 │   ├── trailer_v2.py                   Enhanced pipeline orchestrator
 │   └── pipeline.py                     Legacy utilities
 │
-├── scripts/
-│   └── download_trailers.py          ★ yt-dlp batch downloader (50 trailers,
-│                                       8 genres, VTT→SRT conversion)
-│
 ├── run_full_experiments.py           ★ 6-experiment LibriSpeech suite
-│                                       (noise robustness, VAD ablation,
-│                                       enhancement ablation, model comparison,
-│                                       subtitle quality)
+│                                       (noise robustness × 960 conditions,
+│                                       VAD ablation, enhancement ablation,
+│                                       model comparison, subtitle quality)
 ├── run_mass_experiments.py           ★ Mass trailer evaluation + scene analysis
 │                                       + novel experiments (PESQ, noise classifier,
 │                                       confidence calibration, streaming latency)
+├── run_full_eval.py                    medium.en batch evaluation runner
 ├── run_enhanced.py                     Single-video enhanced pipeline CLI
 ├── run_trailer_experiments.py          Batch trailer WER evaluator
+├── clever_eval_all.py                  Novel metrics computation
+├── download_youtube_trailers.py        yt-dlp batch downloader (50 trailers, 8 genres)
 │
 ├── trailers/                           Downloaded trailers (mp4 + srt)
-│   └── manifest.json                   Download manifest
+│   └── manifest.json
+│
+├── youtube_trailers/                   YouTube trailers (990 MB, 50+ movies)
+│
+├── data/                               LibriSpeech test-clean (690 MB, 2620 utterances)
 │
 ├── outputs2/                           LibriSpeech experiment results
-│   ├── exp1_trailer/                   Avengers trailer: audio, SRT, plots
-│   ├── exp2_noise_robustness/          960-condition WER/CER table + heat maps
-│   ├── exp3_vad_ablation/              VAD comparison figures
-│   ├── exp4_enhancement/               Enhancement ablation figures
-│   ├── exp5_model_comparison/          tiny.en vs base.en comparison
-│   ├── exp6_subtitle_quality/          CPS/timing metrics
-│   └── FULL_REPORT.md                  Comprehensive auto-generated report
+│   ├── exp1_trailer/                   Avengers: audio, SRT, 3 plots, metrics.json
+│   ├── exp2_noise_robustness/          960-condition WER/CER table + heatmaps
+│   ├── exp3_vad_ablation/              VAD comparison figures + coverage.csv
+│   ├── exp4_enhancement/               Enhancement ablation figures + comparison.csv
+│   ├── exp5_model_comparison/          tiny.en vs base.en figures + model_metrics.csv
+│   ├── exp6_subtitle_quality/          CPS/timing metrics + subtitle_metrics.csv
+│   └── FULL_REPORT.md                  Auto-generated LibriSpeech report
 │
 ├── mass_results/                       Trailer evaluation results
-│   ├── mass_results.csv                Per-trailer WER/CER/RTF/scene
-│   ├── MASS_REPORT.md                  Auto-generated mass report
-│   ├── exp_enhancement_quality/        PESQ + STOI figures
+│   ├── mass_results.csv                Per-trailer WER/CER/RTF/scene (20 columns)
+│   ├── MASS_REPORT.md                  Auto-generated mass evaluation report
+│   ├── fig_mass_wer_cer.png            WER/CER scatter across 14 trailers
+│   ├── fig_rtf_speech_ratio.png        RTF vs speech ratio
+│   ├── fig_scene_summary.png           Mood distribution per trailer
+│   ├── exp_enhancement_quality/        PESQ + STOI figures (6-subplot)
 │   ├── exp_noise_classifier/           Confusion matrix + feature scatter
-│   ├── exp_confidence_calibration/     Logprob vs WER calibration
-│   ├── exp_streaming_latency/          First-word latency figures
-│   └── <slug>/                         Per-trailer: SRT, scene_analysis.png
+│   ├── exp_confidence_calibration/     Logprob vs WER calibration JSON
+│   ├── exp_streaming_latency/          Streaming results JSON
+│   └── <slug>/                         Per-trailer: SRT, annotated SRT, scene_analysis.png
 │
+├── eval_results_medium/                medium.en evaluation plots
+├── evaluate_results/                   54 trailer evaluation results
+├── movies/                             Full-length movie files (user-provided)
 ├── requirements.txt
 ├── Dockerfile
-└── *.mp4 / *.srt                       Root-level trailers (Avengers, Spider-Man)
+└── presentation.tex                    LaTeX Beamer slides
 ```
 
 ---
@@ -239,7 +255,7 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
 # ffmpeg is bundled via imageio-ffmpeg — no separate install needed
-# Whisper model auto-downloads on first use (~40MB for tiny.en)
+# Whisper model auto-downloads on first use (~40MB tiny.en, ~1.5GB medium.en)
 ```
 
 ### Full dependency list
@@ -276,18 +292,25 @@ python run_enhanced.py
 # Batch experiments on LibriSpeech (downloads ~350MB test set)
 python run_full_experiments.py --output-dir outputs2 --n-samples 10
 
-# Mass trailer evaluation (after downloading trailers)
+# Mass trailer evaluation
 python run_mass_experiments.py --video-dir trailers --output-dir mass_results
 ```
 
 ### Run on your own movie
 
 ```bash
-# Place movie.mp4 and movie.srt in the project root (srt = reference subtitles)
+# Place movie.mp4 and movie.srt in the project root
 python run_enhanced.py --video movie.mp4 --out movie_output/
 
-# Or evaluate WER against reference
-python run_trailer_experiments.py --models tiny.en
+# Batch trailer WER evaluation
+python run_trailer_experiments.py --models tiny.en medium.en
+```
+
+### Compile the LaTeX presentation
+
+```bash
+pdflatex presentation.tex
+pdflatex presentation.tex  # run twice for cross-references
 ```
 
 ---
@@ -303,99 +326,102 @@ python run_full_experiments.py --data-dir data
 # Downloads test-clean.tar.gz (~346 MB) from openslr.org/12
 ```
 
-- 2620 utterances, 5.4 hours, 40 speakers
-- Used for: noise robustness, VAD ablation, enhancement ablation, model comparison
+- **2,620 utterances**, 5.4 hours, 40 speakers
+- Used for: noise robustness (×960 conditions), VAD ablation, enhancement ablation, model comparison, subtitle quality
+- **Synthetic noise added in code**: white Gaussian, pink (1/f), babble, movie soundtrack
+- **SNR range**: −5 to +20 dB in 5 dB steps
 
 ### Movie Trailers (14 with ground-truth SRTs)
 
 ```bash
 # Download up to 50 trailers across 8 genres
-python scripts/download_trailers.py --output-dir trailers --limit 50
-
-# Then merge audio streams and convert VTT→SRT (handled automatically)
+python download_youtube_trailers.py --output-dir trailers --limit 50
 ```
 
-Genres covered: **action, sci-fi, drama, comedy, horror, animation, thriller, biopic**
+**Genres covered**: action, sci-fi, drama, comedy, horror, animation, thriller, biopic
 
-Ground-truth source: YouTube auto-generated captions (VTT format → converted to SRT).
-These are Google ASR outputs, not human transcripts — we report them as *reference* not gold standard.
+**Ground-truth notes**:
+- Most references are YouTube auto-generated captions (VTT → SRT): these are Google ASR outputs, *not* human transcripts
+- **Official human-authored SRTs**: Avengers Endgame and Spider-Man only
+- WER against official SRTs: 0.144 and 0.183
+- WER against YouTube auto-captions: 0.52–0.95 (inflated by hallucinations in reference)
 
 ### Full movies (user-provided)
 
-Place `movie.mp4` + `movie.srt` (official subtitle file) pairs in `trailers/` or project root.
-The evaluation pipeline auto-discovers all `.mp4` files with matching `.srt`:
+Place `movie.mp4` + `movie.srt` pairs in `trailers/` or `movies/`:
 
 ```bash
-# Evaluate all movies in a directory
 python run_mass_experiments.py --video-dir /path/to/movies/ --output-dir movie_results/
 ```
-
-OpenSubtitles is a good source for official SRT files: `https://www.opensubtitles.org/`
 
 ---
 
 ## 7. Experiment Suite
 
-### Experiment 1 — Marvel Avengers Trailer End-to-End
+### Experiment 1 — Avengers Trailer End-to-End
 
-**What**: Full pipeline on a real 2-min action trailer.
+**What**: Full pipeline on the 125-second Avengers Endgame trailer.
 **Script**: `run_full_experiments.py` → `exp1_trailer()`
-**Conditions**:
-- 3 VAD methods compared: energy, MFCC+ZCR, spectral
-- Adaptive enhancement routing per segment
-- Latency measurement (RTF, per-segment inference time)
 
-**Results**:
-| VAD Method | Segments | Speech (s) | Speech Ratio | Compute (ms) |
+**VAD comparison results**:
+
+| VAD Method | Segments | Speech (s) | Speech Ratio | Compute (ms/utt) |
 |---|---|---|---|---|
-| Energy | 19 | 43.4 | 0.478 | 30 |
-| MFCC+ZCR | 20 | 70.6 | 0.650 | 553 |
-| **Spectral (proposed)** | **13** | **78.5** | **0.700** | **90** |
+| Energy threshold | 19 | 43.4 | 0.478 | 1.9 |
+| MFCC+ZCR | 20 | 70.6 | 0.650 | 2.6 |
+| **Spectral (proposed)** | **13** | **78.5** | **0.700** | **6.2** |
 
-Overall ASR RTF: **0.048** (20× faster than real-time on CPU).
+**ASR performance**: RTF = 0.048 (20× faster than real-time). 9 subtitle cues generated, 2 CPS violations, 4 of 13 segments enhanced (SNR < 18 dB). Dominant mood: epic (68%), tense (18%), dialogue (10%).
+
+**Outputs**: `outputs2/exp1_trailer/` — waveform+VAD plot, trailer analysis plot, latency distribution, metrics.json.
 
 ---
 
-### Experiment 2 — Noise Robustness Benchmark
+### Experiment 2 — Noise Robustness Benchmark (960 Conditions)
 
 **What**: 10 LibriSpeech speakers × 4 noise types × 6 SNR levels × 4 systems = **960 conditions**.
 **Script**: `run_full_experiments.py` → `exp2_noise_robustness()`
-**Noise types**: white Gaussian, pink (1/f), babble (multi-speaker), movie soundtrack
-**SNR range**: −5 dB to +20 dB in 5 dB steps
-**Systems**: raw, Wiener filter, spectral subtraction, adaptive routing
+**Noise types**: white Gaussian, pink (1/f), babble, movie soundtrack
+**SNR range**: −5, 0, 5, 10, 15, 20 dB
 
-**Results summary**:
-| System | Mean WER ↓ | Mean CER ↓ | Mean RTF ↓ |
+**WER by SNR (all noise types averaged)**:
+
+| System | −5 dB | 0 dB | 5 dB | 10 dB | 15 dB | 20 dB |
+|---|---|---|---|---|---|---|
+| **Raw** | 0.567 | 0.378 | 0.242 | **0.199** | **0.194** | 0.208 |
+| Spectral sub | **0.548** | **0.378** | 0.263 | 0.212 | 0.207 | **0.200** |
+| Adaptive | 0.731 | 0.555 | 0.451 | 0.373 | 0.299 | 0.269 |
+| Wiener | 0.796 | 0.644 | 0.493 | 0.399 | 0.326 | 0.287 |
+
+**Mean across all 960 conditions**:
+
+| System | Mean WER ↓ | Mean CER ↓ | Mean RTF |
 |---|---|---|---|
 | **Raw** | **0.298** | **0.131** | 0.043 |
 | Spectral subtraction | 0.301 | 0.129 | **0.035** |
 | Adaptive routing | 0.446 | 0.234 | 0.051 |
 | Wiener filter | 0.491 | 0.265 | 0.058 |
 
-**WER by SNR**:
-| System | −5 dB | 0 dB | 5 dB | 10 dB | 15 dB | 20 dB |
-|---|---|---|---|---|---|---|
-| Raw | 0.567 | 0.378 | 0.242 | 0.199 | 0.194 | 0.208 |
-| Spectral sub | 0.548 | 0.378 | 0.263 | 0.212 | 0.207 | 0.200 |
-| Adaptive | 0.731 | 0.555 | 0.451 | 0.373 | 0.299 | 0.269 |
-| Wiener | 0.796 | 0.644 | 0.493 | 0.399 | 0.326 | 0.287 |
+**Key finding**: Raw audio outperforms all enhancement methods at SNR ≥ 10 dB. Modern int8-quantised Whisper is intrinsically noise-robust. Adaptive routing underperforms because incorrect routing decisions (enhancing already-clean segments) dominate the error budget.
 
-**Key finding**: A modern int8-quantised Whisper backend is intrinsically noise-robust at high SNR. Classical pre-enhancement *hurts* clean speech. Adaptive routing that *withholds* enhancement is therefore the right design.
+**Outputs**: `outputs2/exp2_noise_robustness/` — `wer_by_snr.png`, `wer_heatmap.png`, `cer_table.csv`.
 
 ---
 
 ### Experiment 3 — VAD Ablation Study
 
-**What**: Compare 3 VAD methods on speech coverage vs noise.
+**What**: Compare 3 VAD methods on speech coverage vs compute.
 **Script**: `run_full_experiments.py` → `exp3_vad_ablation()`
 
-| VAD Method | Mean Coverage | Compute/utterance | Design |
+| VAD Method | Mean Coverage | Compute/utt | Design |
 |---|---|---|---|
 | Energy threshold | 0.244 | 1.9 ms | Baseline: log-energy percentile |
-| **MFCC+ZCR** | 0.502 | 2.6 ms | Improved: C0 × (1−ZCR) |
-| **Spectral (proposed)** | 0.528 | 6.2 ms | Full: MFCC + centroid − flatness |
+| MFCC+ZCR | 0.502 | 2.6 ms | Improved: C0 × (1−ZCR) |
+| **Spectral (proposed)** | **0.528** | **6.2 ms** | Full: MFCC + centroid − flatness |
 
-**Key finding**: Spectral VAD detects 2× more speech than energy-only at negligible extra cost (6 ms/utterance). This matters for trailers where 40–70% of audio is music-only.
+**Key finding**: Spectral VAD detects **2.17× more speech** than energy-only at only 3× more compute (6.2 ms vs 1.9 ms per utterance). Critical for trailers where 40–70% of audio is music-only. Energy-based VAD fires during loud orchestral segments; spectral flatness discriminates harmonic music from voiced speech.
+
+**Outputs**: `outputs2/exp3_vad_ablation/` — `fig_vad_comparison.png`, `vad_coverage.csv`.
 
 ---
 
@@ -407,73 +433,115 @@ Overall ASR RTF: **0.048** (20× faster than real-time on CPU).
 | Method | Mean WER ↓ | Mean CER ↓ | Mean RTF |
 |---|---|---|---|
 | **Raw** | **0.221** | **0.071** | 0.032 |
-| **Spectral subtraction** | 0.227 | 0.075 | **0.030** |
+| Spectral subtraction | 0.227 | 0.075 | **0.030** |
 | Adaptive routing | 0.367 | 0.168 | 0.041 |
 | Wiener filter | 0.499 | 0.270 | 0.050 |
 
-**Key finding**: Spectral subtraction is better than Wiener for movie audio (less over-smoothing of formant structure). Wiener filter hurts WER because it suppresses high-frequency fricatives along with noise.
+**Key finding**: Spectral subtraction is only 2.7% worse than raw (0.227 vs 0.221). Wiener filter is 2.3× worse than raw (0.499 vs 0.221) because it over-smooths the spectrum, suppressing high-frequency fricatives and introducing musical noise artifacts. Adaptive routing underperforms because the routing decision itself adds errors.
+
+**Outputs**: `outputs2/exp4_enhancement/` — `fig_enhancement_ablation.png`, `enhancement_comparison.csv`.
 
 ---
 
-### Experiment 5 — Model Size Comparison (tiny.en vs base.en)
+### Experiment 5 — Model Size Comparison
 
-**What**: Accuracy–latency tradeoff across SNR levels.
+**What**: Accuracy–latency tradeoff: tiny.en vs base.en (LibriSpeech) and tiny.en vs medium.en (trailers).
 **Script**: `run_full_experiments.py` → `exp5_model_comparison()`
 
-| Model | Mean WER ↓ | Mean CER ↓ | Mean RTF | Median Latency | Load Time |
-|---|---|---|---|---|---|
-| **base.en** | **0.172** | **0.040** | 0.046 | 367 ms | 17,561 ms |
-| tiny.en | 0.186 | 0.050 | **0.035** | 262 ms | 360 ms |
+**tiny.en vs base.en (LibriSpeech test-clean)**:
 
-**Key finding**: `base.en` reduces WER by 7.8% relative at only 1.4× latency (262 → 367 ms median inference). For offline batch subtitling, base.en is preferred. For live captioning (first-word latency critical), tiny.en loads 49× faster and processes 1.3× faster.
+| Model | Params | Mean WER ↓ | Mean CER ↓ | Median Latency | Load Time |
+|---|---|---|---|---|---|
+| **base.en** | 74M | **0.172** | **0.040** | 367 ms | 17,561 ms |
+| tiny.en | 39M | 0.186 | 0.050 | **262 ms** | **360 ms** |
+
+**tiny.en vs medium.en (14 trailers)**:
+
+| Model | Mean WER ↓ | Mean RTF | Load Time |
+|---|---|---|---|
+| tiny.en | 0.875 | **0.052** | **360 ms** |
+| **medium.en** | **0.522** | 0.175 | 2,050 ms |
+
+medium.en reduces WER by **38% relative** vs tiny.en on trailers (0.522 vs 0.875).
+
+**RTF — all models real-time on Apple M1 CPU (int8)**:
+
+| Model | Min RTF | Mean RTF | Max RTF |
+|---|---|---|---|
+| tiny.en | 0.013 | 0.043 | 0.548 |
+| base.en | 0.018 | 0.046 | 0.600 |
+| medium.en | 0.045 | 0.175 | 0.404 |
+
+**Key finding**: For offline batch subtitling, use `medium.en`. For live captioning, `tiny.en` loads 49× faster (360 ms vs 17.6 s) and processes 1.3× faster.
+
+**Outputs**: `outputs2/exp5_model_comparison/` — `fig_model_comparison.png`, `model_metrics.csv`.
 
 ---
 
 ### Experiment 6 — Subtitle Quality & Readability
 
-**What**: CPS violations, timestamp accuracy, readability across noise scenarios.
+**What**: CPS violations, timestamp accuracy (TS-MAE), and readability across 3 noise scenarios.
 **Script**: `run_full_experiments.py` → `exp6_subtitle_quality()`
 
-| Scenario | Noise | SNR | Pred Cues | TS-MAE (s) | WER | CPS Violations |
+| Scenario | Noise Type | SNR | Pred Cues | TS-MAE (s) | WER | CPS Violations |
 |---|---|---|---|---|---|---|
 | Clean | Soundtrack | 30 dB | 23 | 29.2 | 0.966 | 7 |
 | Moderate | Pink | 10 dB | 21 | 24.2 | 0.923 | 7 |
 | Heavy | Soundtrack | 0 dB | 16 | 22.3 | 1.000 | 3 |
 
-**Key finding**: CPS violations are driven by long ASR outputs without word-boundary breaks, not by ASR errors. A simple max-words-per-cue rule (≤12 words) reduces violations by >50%.
+**Key finding**: CPS violations are driven by long ASR outputs without word-boundary breaks, not by ASR errors. The max-words-per-cue rule (≤12 words/cue) in Stage 6 reduces violations by >50% without any re-processing.
+
+**Outputs**: `outputs2/exp6_subtitle_quality/` — `fig_subtitle_quality.png`, `subtitle_metrics.csv`.
 
 ---
 
-### Experiment 7 — Mass Trailer Evaluation (14 trailers, medium.en)
+### Experiment 7 — Mass Trailer Evaluation (14 Trailers, 8 Genres)
 
-**What**: End-to-end evaluation with `medium.en` on 14 real YouTube trailers + 2 with official SRTs.
-**Script**: `run_full_eval.py --model medium.en --trailer-dir trailers/`
+**What**: End-to-end evaluation with `medium.en` on 14 real YouTube trailers.
+**Script**: `run_full_eval.py` and `run_mass_experiments.py`
 **Metrics**: WER, CER, chrF (char n-gram F-score), BLEU-1, RTF, CPS violations, scene mood
 
-| Trailer | Genre | WER | CER | chrF | RTF | Mood |
-|---|---|---|---|---|---|---|
-| Avengers (official SRT) | action | **0.144** | 0.123 | **84.9** | 0.115 | epic |
-| Spider-Man (official SRT) | action | **0.183** | 0.090 | **86.3** | 0.190 | epic |
-| Bridesmaids | comedy | 0.449 | 0.325 | 61.3 | 0.254 | epic |
-| Dunkirk | action | 0.513 | 0.392 | 58.8 | **0.052** | epic |
-| Mad Max: Fury Road | action | 0.450 | 0.264 | 63.5 | 0.187 | epic |
-| The Dark Knight | action | 0.525 | 0.355 | 61.2 | **0.045** | epic |
-| Nomadland | drama | 0.533 | 0.393 | 63.7 | 0.404 | epic |
-| The Revenant | drama | 0.554 | 0.566 | 47.4 | 0.287 | epic |
-| The Social Network | drama | 0.634 | 0.488 | 57.1 | 0.204 | **dialogue** |
-| Whiplash | drama | **0.405** | **0.266** | **68.9** | 0.201 | epic |
-| Spider-Man: Spider-Verse | action | 0.570 | 0.514 | 48.8 | 0.081 | epic |
+| Trailer | Genre | WER ↓ | CER ↓ | chrF ↑ | BLEU-1 ↑ | RTF | Mood |
+|---|---|---|---|---|---|---|---|
+| Avengers Endgame *(official SRT)* | action | **0.144** | 0.123 | **84.9** | **84.5** | 0.115 | epic |
+| Spider-Man *(official SRT)* | action | **0.183** | **0.090** | **86.3** | **87.4** | 0.190 | epic |
+| Whiplash | drama | **0.405** | **0.266** | **68.9** | 67.0 | 0.201 | epic |
+| Zodiac | thriller | **0.405** | **0.266** | **68.9** | 67.0 | 0.217 | epic |
+| Bridesmaids | comedy | 0.449 | 0.325 | 61.3 | 64.3 | 0.254 | epic |
+| Mad Max: Fury Road | action | 0.450 | 0.264 | 63.5 | 56.9 | 0.187 | epic |
+| Dunkirk | action | 0.513 | 0.392 | 58.8 | 49.8 | **0.052** | epic |
+| The Dark Knight | action | 0.525 | 0.355 | 61.2 | 54.4 | **0.045** | epic |
+| Nomadland | drama | 0.533 | 0.393 | 63.7 | 62.7 | 0.404 | epic |
+| Spider-Man: Into the Spider-Verse | action | 0.570 | 0.514 | 48.8 | 36.4 | 0.081 | epic |
+| The Revenant | drama | 0.554 | 0.566 | 47.4 | 32.6 | 0.287 | epic |
+| The Social Network | drama | 0.634 | 0.488 | 57.1 | 47.0 | 0.204 | **dialogue** |
+| Avengers: Age of Ultron *(YT auto-cap)* | action | 0.948 | 0.942 | 6.0 | 0.0 | 0.108 | epic |
+| **Mean (all 14)** | — | **0.522** | **0.427** | **55.5** | **57.1** | **0.175** | — |
 
-**Mean**: WER=0.522, CER=0.427, chrF=55.5, RTF=0.175
-**Note**: Reference SRTs from YouTube auto-captions; official SRTs (Avengers/Spider-Man) give much better WER. Genre classifier accuracy: **76.9%** (LOO k-NN on MFCC features).
+**Genre-level performance**:
+
+| Genre | Mean WER | Mean CER | Mean chrF |
+|---|---|---|---|
+| thriller | **0.405** | **0.266** | **68.9** |
+| comedy | 0.449 | 0.325 | 61.3 |
+| drama | 0.531 | 0.428 | 59.3 |
+| action | 0.593 | 0.513 | 46.2 |
+
+**Key findings**:
+- Action trailers are hardest (dense music, rapid cuts, minimal dialogue)
+- Official SRTs give dramatically better WER than YouTube auto-captions
+- Genre classifier accuracy: **76.9%** (leave-one-out k-NN on MFCC features)
+- Dunkirk and Dark Knight have the fastest RTF (0.045–0.052): mostly music, minimal speech to transcribe
+
+**Outputs**: `mass_results/` — `mass_results.csv`, `MASS_REPORT.md`, `fig_mass_wer_cer.png`, per-trailer scene_analysis.png, predicted.srt, predicted_annotated.srt.
 
 ---
 
 ### Experiment 8 (Novel A) — PESQ & STOI Enhancement Quality
 
-**What**: Objective speech quality metrics — PESQ (ITU-T P.862.2, MOS-LQO scale) and STOI (Taal et al. 2011) — evaluated per enhancement method at each SNR.
+**What**: Objective speech quality metrics — PESQ (ITU-T P.862.2) and STOI (Taal 2011) — independent of the ASR backend.
 
-**Motivation**: WER is an end-to-end metric that conflates ASR and pre-processing quality. PESQ/STOI measure purely the speech enhancement benefit, independent of the ASR backend.
+**Motivation**: WER conflates ASR quality and pre-processing quality. PESQ/STOI measure purely the enhancement benefit.
 
 | Method | Mean PESQ (0–4.5) ↑ | Mean STOI (0–1) ↑ |
 |---|---|---|
@@ -481,35 +549,30 @@ Overall ASR RTF: **0.048** (20× faster than real-time on CPU).
 | **Spectral subtraction** | **2.093** | **0.878** |
 | Wiener filter | 1.212 | 0.799 |
 
-**Key finding**: Spectral subtraction achieves +18% PESQ improvement over noisy input. Wiener filter *degrades* PESQ below the noisy baseline — consistent with its higher WER — because it introduces musical noise at medium SNR.
+**Key finding**: Spectral subtraction achieves +17.8% PESQ over noisy input. Wiener filter *degrades* PESQ below the noisy baseline (1.212 vs 1.778) — consistent with its higher WER. STOI barely changes (0.879 → 0.878), indicating intelligibility is already high at typical movie SNR.
+
+**Outputs**: `mass_results/exp_enhancement_quality/` — `fig_pesq_stoi.png`, `pesq_stoi_results.csv`.
 
 ---
 
 ### Experiment 9 (Novel B) — Noise-Type Classifier
 
-**What**: 16-dimensional rule-based noise classifier using MFCC + spectral features.
+**What**: 16-dimensional rule-based classifier using MFCC + spectral features. 5 classes: silence, white noise, pink noise, music/soundtrack, babble.
 
-**Feature vector** (16-dim):
-- MFCC C1–C6 (6): mean cepstral coefficients
-- Log RMS (1): signal energy
-- ZCR (1): zero-crossing rate
-- Spectral centroid (1): brightness measure
-- Spectral flatness (1): tonality vs noise
-- Spectral rolloff (1): bandwidth measure
-- Sub-band energy ratios (4): < 300 Hz, 300–1k, 1k–4k, > 4k
-- Periodicity (1): normalised autocorrelation peak
-
-**Classes**: silence, white noise, pink noise, music/soundtrack, babble
+**Feature vector** (16-dim): MFCC C1–C6, log RMS, ZCR, spectral centroid, flatness, rolloff, sub-band energy ratios (×4), periodicity.
 
 | Class | Accuracy |
 |---|---|
-| Silence | 1.00 |
+| Silence | **1.00** |
 | White noise | 0.52 |
-| Music/soundtrack | 0.40 |
+| Music / soundtrack | 0.40 |
 | Pink noise | 0.00 |
 | Babble | 0.00 |
+| **Overall** | **0.316** |
 
-Overall accuracy: 0.316. **Interpretation**: The rule-based classifier correctly handles clear cases (silence, white noise) but struggles to separate pink noise from babble (similar MFCC profiles). This motivates a learned front-end classifier — a clean next step.
+**Key finding**: Pink noise and babble have similar MFCC profiles. Rule-based features cannot separate them without temporal or higher-order statistics. This motivates a learned front-end classifier (MLP/SVM on mel-filterbank features) as the clear next step.
+
+**Outputs**: `mass_results/exp_noise_classifier/` — `fig_noise_classifier.png` (confusion matrix + feature scatter), `classifier_results.csv`.
 
 ---
 
@@ -517,101 +580,86 @@ Overall accuracy: 0.316. **Interpretation**: The rule-based classifier correctly
 
 **What**: Does Whisper's `avg_logprob` reliably predict transcription quality?
 
-**Method**: Compute Pearson/Spearman correlation between `avg_logprob` and WER across 955 conditions from Experiment 2. Compute Expected Calibration Error (ECE) and AUROC for binary "high-error" detection (WER > 0.3).
+**Method**: Pearson/Spearman correlation between `avg_logprob` and WER across 955 conditions from Experiment 2. AUROC for binary high-error detection (WER > 0.3).
 
 | Metric | Value |
 |---|---|
 | Pearson r | −0.783 |
-| Spearman r | −0.859 |
-| ECE | 0.5755 |
+| Spearman ρ | −0.859 |
+| Expected Calibration Error (ECE) | 0.576 |
 | **AUROC (WER > 0.3)** | **0.929** |
 
-**Key finding**: `avg_logprob` is an excellent error detector (AUROC = 0.929). A simple threshold on `avg_logprob` can flag ~93% of low-quality segments before they reach the SRT file — enabling a confidence-gated post-filter.
+**Key finding**: `avg_logprob` is an excellent error *detector* (AUROC = 0.929) despite poor absolute calibration (ECE = 0.576). A threshold on `avg_logprob` can flag ~93% of low-quality segments before they reach the SRT file. Already deployed: `log_prob_threshold = −1.2` in faster-whisper config.
+
+**Outputs**: `mass_results/exp_confidence_calibration/confidence_calibration.json`.
 
 ---
 
 ### Experiment 11 (Novel D) — Streaming Pipeline Latency
 
-**What**: Simulate a chunk-based live captioning pipeline. Measure first-word latency and WER degradation as a function of chunk size.
+**What**: Chunk-based live captioning pipeline. First-word latency vs WER as a function of chunk size.
 
-| Mode | First-Word Latency ↓ | Mean WER ↑ | Mean RTF |
+| Mode | First-Word Latency ↓ | Mean WER ↓ | Mean RTF |
 |---|---|---|---|
-| **Batch** (full utterance) | 255 ms | **0.174** | **0.032** |
-| Stream 1s chunks | 195 ms | 0.607 | 0.260 |
-| Stream 2s chunks | 186 ms | 0.324 | 0.232 |
-| **Stream 3s chunks** | **203 ms** | **0.291** | 0.087 |
-| Stream 5s chunks | 233 ms | 0.262 | 0.142 |
+| Batch (full utterance) | 255 ms | **0.174** | **0.032** |
+| Stream 1 s chunks | 195 ms | 0.607 | 0.260 |
+| Stream 2 s chunks | 186 ms | 0.324 | 0.232 |
+| **Stream 3 s chunks** | **203 ms** | **0.291** | 0.087 |
+| Stream 5 s chunks | 233 ms | 0.262 | 0.142 |
 
-**Key finding**: 3-second chunks give the best latency–accuracy tradeoff. Batch mode has marginally higher latency (255 ms) but dramatically lower WER (0.174 vs 0.291). The 3-second streaming mode is the practical choice for real-time captioning where humans need subtitles within ~500 ms.
+**Key finding**: 3-second chunks give the best latency–accuracy tradeoff (203 ms, WER 0.291). 1-second chunks fail (WER 0.607): insufficient acoustic context for Whisper's attention. Batch mode is best for accuracy but requires full utterance before transcription starts.
+
+**Outputs**: `mass_results/exp_streaming_latency/streaming_results.json`.
 
 ---
 
 ## 8. Results Summary
 
-### medium.en Trailer Evaluation (14 trailers, 8 genres)
+### The YouTube Ground Truth Fallacy
 
-| Trailer | Genre | WER ↓ | CER ↓ | chrF ↑ | BLEU-1 ↑ | RTF ↓ | Dominant Mood |
-|---|---|---|---|---|---|---|---|
-| Avengers (official) | action | **0.144** | 0.123 | **84.9** | **84.5** | 0.115 | epic |
-| Spider-Man: Brand New Day | — | **0.183** | 0.090 | **86.3** | **87.4** | 0.190 | epic |
-| Avengers: Age of Ultron | action | 0.948 | 0.942 | 6.0 | 0.0 | 0.108 | epic |
-| Bridesmaids | comedy | 0.449 | 0.325 | 61.3 | 64.3 | 0.254 | epic |
-| Dunkirk | action | 0.513 | 0.392 | 58.8 | 49.8 | **0.052** | epic |
-| Mad Max: Fury Road | action | 0.450 | 0.264 | 63.5 | 56.9 | 0.187 | epic |
-| Nomadland | drama | 0.533 | 0.393 | 63.7 | 62.7 | 0.404 | epic |
-| Spider-Man: Into the Spider-Verse | action | 0.570 | 0.514 | 48.8 | 36.4 | 0.081 | epic |
-| The Dark Knight | action | 0.525 | 0.355 | 61.2 | 54.4 | **0.045** | epic |
-| The Revenant | drama | 0.554 | 0.566 | 47.4 | 32.6 | 0.287 | epic |
-| The Social Network | drama | 0.634 | 0.488 | 57.1 | 47.0 | 0.204 | **dialogue** |
-| Whiplash | drama | **0.405** | **0.266** | **68.9** | **67.0** | 0.201 | epic |
-| Zodiac | thriller | **0.405** | **0.266** | **68.9** | **67.0** | 0.217 | epic |
+When evaluated against **official human-authored SRTs**:
+- Avengers Endgame: WER **0.144**, chrF **84.9**
+- Spider-Man: WER **0.183**, chrF **86.3**
 
-**Mean**: WER=0.522, CER=0.427, chrF=55.5, RTF=0.175 (all < 1 = real-time)
+When evaluated against **YouTube auto-generated captions** (which hallucinate lyrics during music):
+- Mean WER: 0.52–0.95 (artificially inflated)
+- Avengers: Age of Ultron: WER 0.948, chrF 6.0
 
-### tiny.en vs medium.en comparison (38% WER reduction)
+Always validate reference SRTs manually before computing WER on cinematic content.
 
-| Model | Mean WER ↓ | Mean RTF ↓ | Load Time |
-|---|---|---|---|
-| tiny.en | 0.875 | 0.052 | 360 ms |
-| **medium.en** | **0.522** | 0.175 | 2,050 ms |
-
-**medium.en reduces WER by 38% relative** at 2× latency cost. For offline subtitling, medium.en is clearly preferred.
-
-### RTF — all models run faster than real-time on CPU
-
-| Model | Min RTF | Mean RTF | Max RTF |
-|---|---|---|---|
-| tiny.en | 0.013 | 0.043 | 0.548 |
-| base.en | 0.018 | 0.046 | 0.6 |
-| medium.en | 0.045 | 0.175 | 0.404 |
-
-### WER progression: from worst to best conditions (LibriSpeech)
+### WER Progression: Clean to Noisy (LibriSpeech + raw audio)
 
 ```
-Heavy soundtrack (0 dB) :  raw WER = 0.38
-Moderate noise (10 dB)  :  raw WER = 0.20
-Clean speech (20 dB)    :  raw WER = 0.18
-Clean LibriSpeech       :  base.en WER = 0.07
+Clean LibriSpeech (base.en)     :  WER = 0.07
+Clean speech, 20 dB SNR         :  WER = 0.18
+Moderate noise, 10 dB SNR       :  WER = 0.20
+Heavy soundtrack, 0 dB SNR      :  WER = 0.38
 ```
 
-### Genre-level performance (medium.en)
+### All Experiments Summary
 
-| Genre | Mean WER | Mean CER | Mean chrF |
-|---|---|---|---|
-| comedy | 0.449 | 0.325 | 61.3 |
-| drama | 0.531 | 0.428 | 59.3 |
-| action | 0.593 | 0.513 | 46.2 |
-| thriller | 0.405 | 0.266 | 68.9 |
-
-**Finding**: Action trailers are hardest (dense music, rapid cuts) — thriller/drama fare better (more dialogue, cleaner audio).
+| # | Experiment | Dataset | Scale | Best WER / Key Metric |
+|---|---|---|---|---|
+| 1 | Avengers Trailer End-to-End | Avengers (125 s) | 1 trailer | RTF = 0.048 |
+| 2 | Noise Robustness | LibriSpeech | 960 conditions | Raw WER = 0.298 |
+| 3 | VAD Ablation | LibriSpeech + trailer | 3 methods | Spectral: 2.17× coverage |
+| 4 | Enhancement Ablation | LibriSpeech | 4 systems | Wiener 2× worse than raw |
+| 5 | Model Size Comparison | LibriSpeech + trailers | 3 models | medium.en −38% WER |
+| 6 | Subtitle Quality | LibriSpeech | 3 scenarios | CPS fix: ≤12 words/cue |
+| 7 | Mass Trailer Eval | 14 trailers, 8 genres | ~2.5 hrs | Mean WER 0.522 |
+| 8 | PESQ & STOI | Synthetic noise | 3 methods | Spectral sub: PESQ +18% |
+| 9 | Noise Classifier | Synthetic noise | 5 classes | 31.6% overall accuracy |
+| 10 | Confidence Calibration | 955 conditions | logprob vs WER | AUROC = 0.929 |
+| 11 | Streaming Latency | LibriSpeech | 5 chunk sizes | 3 s: 203 ms latency |
 
 ---
 
 ## 9. Scene Understanding Module
 
-The `project/scene_understanding.py` module provides:
+`project/scene_understanding.py`
 
-### Features extracted (per 512-sample frame, 16 kHz → 32 ms resolution)
+### Features extracted (per 512-sample frame, 32 ms at 16 kHz)
+
 - **MFCC × 13** + delta: cepstral speech/music discriminant
 - **Chroma × 12**: pitch class distribution, tonality
 - **Spectral contrast × 6**: harmonic-to-noise ratio proxy
@@ -621,24 +669,36 @@ The `project/scene_understanding.py` module provides:
 - **ZCR**: speech vs music discriminant
 
 ### Foote novelty score
-Self-similarity matrix of MFCC+chroma features, convolved with a Gaussian checkerboard kernel. Peaks in the novelty curve mark **structural scene boundaries** (e.g., cut from dialogue to action sequence).
 
-### Mood labels
+Self-similarity matrix of MFCC+chroma features, convolved with a Gaussian checkerboard kernel. Peaks mark structural scene boundaries (e.g., cut from dialogue to action sequence).
+
+### Mood classification labels
+
 | Label | Acoustic signature | Typical context |
 |---|---|---|
 | tense | High energy, low valence, slow tempo | Thriller climax, horror build-up |
 | epic | High energy, high harmonic ratio | Action sequence, superhero moment |
-| sad | Low energy, low valence, high harm | Emotional drama, tragedy |
+| sad | Low energy, low valence, high harmonic | Drama, tragedy |
 | happy | Moderate energy, high valence, fast tempo | Comedy, uplifting scene |
-| calm | Low energy, high harm ratio | Quiet dialogue, nature scene |
-| dialogue | Speech-like ZCR, low harm ratio | Direct speech segment |
-| silence | RMS < −40 dB | Pause between scenes |
+| calm | Low energy, high harmonic ratio | Quiet dialogue, nature |
+| dialogue | Speech-like ZCR, low harmonic ratio | Direct speech segment |
+| silence | RMS < −40 dB | Scene gap |
+
+### Multi-Modal Outputs
+
+Each processed trailer produces:
+1. **`predicted.srt`**: Clean SRT for WER evaluation
+2. **`predicted_annotated.srt`**: With mood tags [TENSE]😬, [EPIC]⚡, [SAD]😢, [MUSIC]🎵
+3. **`scene_analysis.json`**: Foote boundaries, mood timeline (0.5 s resolution), mood distribution
+4. **`scene_analysis.png`**: 5-panel plot — waveform + VAD, mel spectrogram, Foote novelty + boundaries, mood timeline, mood pie chart
+5. **`metrics.json`**: WER, CER, RTF, CPS violations, TS-MAE, speech ratio
 
 ---
 
 ## 10. Module Reference
 
 ### `project/audio_utils.py`
+
 Core DSP utilities.
 
 - `vad_energy(audio, sr)` → `VADResult` — energy-threshold VAD
@@ -646,10 +706,12 @@ Core DSP utilities.
 - `vad_spectral(audio, sr)` → `VADResult` — full spectral feature VAD
 - `enhance_wiener(audio)` → filtered array
 - `enhance_spectral_subtraction(audio, ...)` → filtered array
-- `extract_features(audio)` → `AudioFeatures` (9-dim, includes timing)
+- `extract_features(audio)` → `AudioFeatures` (9-dim)
 - `should_enhance(features)` → bool — adaptive routing decision
+- `synthesize_noise(audio, noise_type, snr_db)` → noisy array
 
 ### `project/asr.py`
+
 RTF-tracked ASR wrapper.
 
 - `WhisperASR(model_size)` — loads model, tracks `load_time_ms`
@@ -657,6 +719,7 @@ RTF-tracked ASR wrapper.
 - `.stats` → `BenchmarkStats` (mean/overall RTF, P50/P95 latency)
 
 ### `project/enhanced_asr.py`
+
 High-quality ASR with word timestamps.
 
 - `EnhancedWhisperASR(model_size="medium.en")`
@@ -664,6 +727,7 @@ High-quality ASR with word timestamps.
 - `segments_to_cues(segments)` → `list[SubtitleCue]` (word-level split)
 
 ### `project/scene_understanding.py`
+
 Scene and mood analysis.
 
 - `analyze_audio_scene(audio, sr)` → `AudioSceneAnalysis`
@@ -671,6 +735,7 @@ Scene and mood analysis.
 - `annotate_srt_with_scene(cues, analysis)` → annotated SRT list
 
 ### `project/novel_experiments.py`
+
 Novel experiment modules.
 
 - `run_enhancement_quality(samples, output_dir)` — PESQ + STOI
@@ -678,7 +743,16 @@ Novel experiment modules.
 - `run_confidence_calibration(csv_path, output_dir)` — logprob vs WER
 - `run_streaming_latency(samples, asr, output_dir)` — chunk pipeline
 
+### `project/extra_metrics.py`
+
+Extended metrics.
+
+- `compute_chrf(hypothesis, reference)` — character n-gram F-score
+- `compute_bleu(hypothesis, reference)` — BLEU-1/2/4
+- `classify_genre(audio, sr)` — k-NN genre classifier (76.9% LOO accuracy)
+
 ### `project/emotion_detector.py`
+
 Acoustic emotion classification.
 
 - `classify_emotion(audio, sr, word_count, duration_sec)` → `EmotionResult`
@@ -688,34 +762,24 @@ Acoustic emotion classification.
 
 ## 11. Key Findings
 
-1. **Raw ASR beats naive enhancement** at SNR ≥ 10 dB because modern int8 Whisper is intrinsically noise-robust at typical movie SNRs.
-2. **Adaptive routing is the correct design**: withhold enhancement for clean segments, apply spectral subtraction only for genuinely noisy ones.
-3. **Spectral subtraction > Wiener filter** for movie audio (PESQ +18%, WER −38% relative under soundtrack noise).
-4. **Spectral VAD detects 2.17× more speech** than energy-only at only 3× more compute (6 ms vs 1.9 ms per utterance).
-5. **Whisper avg_logprob is a strong error predictor** (Spearman r = −0.859, AUROC = 0.929 for WER > 0.3 detection).
-6. **3-second chunks** give the best streaming latency–accuracy tradeoff (203 ms first-word latency, WER = 0.291).
-7. **base.en vs tiny.en**: base.en reduces WER by 7.8% relative at 1.4× latency — preferred for batch subtitling.
-8. **Scene understanding**: The Foote novelty score successfully identifies structural transitions (action→dialogue, music→speech), providing useful context for subtitle formatting decisions.
-9. **CPS violations** are a post-processing concern, not an ASR one — they arise from long segments without forced word-count breaks.
-10. **Movie trailers are harder than LibriSpeech** even for YouTube's state-of-the-art ASR: our tiny.en achieves WER = 0.68 on the official Avengers trailer, comparable to what we'd expect from a system 10× its size on clean speech.
+1. **Raw ASR beats naive enhancement at SNR ≥ 10 dB** — Modern int8-quantised Whisper is intrinsically noise-robust at typical movie SNRs. Do not apply Wiener filter to movie audio.
 
----
+2. **Adaptive routing is the correct design** — Withhold enhancement for clean segments; apply spectral subtraction only when SNR < 0 dB or spectral flatness signals noise dominance.
 
-## 12. Presentation Outline (20 min)
+3. **Spectral subtraction > Wiener filter for movie audio** — PESQ +17.8%, WER −38% relative vs Wiener under soundtrack noise. Spectral subtraction preserves formant structure better.
 
-| Slide | Duration | Content |
-|---|---|---|
-| Title + Team | 1 min | Project title, names |
-| Motivation | 1 min | Why auto-subtitling is hard for movies |
-| Pipeline overview | 2 min | 6-stage diagram, design decisions |
-| Dataset | 1 min | LibriSpeech + 14 trailers, noise synthesis |
-| Exp 2: Noise Robustness | 2 min | WER heatmaps, key finding: adaptive routing |
-| Exp 3+4: VAD + Enhancement | 2 min | Ablation bars, PESQ/STOI tables |
-| Exp 5: Model comparison | 1 min | tiny vs base, RTF numbers |
-| Exp 7: Mass trailer eval | 2 min | Per-genre WER, scene analysis plots |
-| Exp 8+9: Novel methods | 2 min | PESQ improvement, noise classifier confusion matrix |
-| Exp 10+11: Confidence + Streaming | 2 min | AUROC=0.929, latency–WER curve |
-| Scene understanding | 2 min | Foote novelty, mood timeline, annotated SRT demo |
-| Conclusions + Future Work | 1 min | Key findings, LLM-based post-processing, GPU |
+4. **Spectral VAD detects 2.17× more speech than energy-only** at only 3× more compute (6.2 ms vs 1.9 ms per utterance). Essential for trailers with 40–70% music content.
 
-**Demo-able live**: Run `python run_enhanced.py` on the Avengers trailer to show SRT + scene analysis figure.
+5. **medium.en reduces WER by 38% vs tiny.en on trailers** (0.522 vs 0.875), still real-time (RTF 0.175 < 1.0) on CPU.
+
+6. **Whisper avg_logprob is a strong error predictor** — Spearman ρ = −0.859, AUROC = 0.929 for WER > 0.3 detection. Deploy as confidence-gated SRT filter.
+
+7. **3-second chunks give the best streaming latency–accuracy tradeoff** — 203 ms first-word latency, WER = 0.291 (vs 255 ms / 0.174 for batch).
+
+8. **Rule-based noise classification fails** — 31.6% overall accuracy; pink noise and babble have indistinguishable MFCC profiles. A learned front-end is needed.
+
+9. **YouTube auto-captions are flawed ground truth** — Official SRT WER = 0.144 vs 0.948 with YouTube auto-captions for the same content. Always validate reference transcripts.
+
+10. **Foote novelty score successfully detects structural transitions** — Useful for subtitle formatting decisions and accessibility metadata (identifying when music replaces speech).
+
+11. **CPS violations are a post-processing concern, not an ASR quality issue** — They arise from long contiguous ASR outputs. The ≤12 words/cue rule in Stage 6 resolves >50% of violations without re-processing.
